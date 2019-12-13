@@ -1,3 +1,5 @@
+# Main script
+
 from GUI.StartWindow import StartWindow
 
 root=StartWindow()
