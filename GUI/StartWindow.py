@@ -28,9 +28,7 @@ class StartWindow(XinguWindow):
         self.LoginButton.place(x=175,y=445,anchor=N)
 
     def Login(self,event):
-        from GUI.MainWindow import MainWindow
-
-        print(event.widget)
+        from GUI.MainWindow.MainWindow import MainWindow
 
         if self.DataBaseEntry.get()=="Prueba":
             if self.PasswordEntry.get()=="Password":
