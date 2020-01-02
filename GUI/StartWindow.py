@@ -33,7 +33,7 @@ class StartWindow(XinguWindow):
         if self.DataBaseEntry.get() == "Prueba":
             if self.PasswordEntry.get() == "Password":
                 print("Correcto")
-                main_window = MainWindow()
+                self.main_window = MainWindow()
                 self.withdraw()
                 #main_window.mainloop()
             else:
