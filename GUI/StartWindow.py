@@ -44,8 +44,9 @@ class StartWindow(XinguWindow):
                 print("Correcto")
                 self.ErrorPassLabel.config(fg="Purple")
                 self.main_window = MainWindow()
-                self.withdraw()
-                #main_window.mainloop()
+                #self.withdraw()
+                self.destroy()
+                self.main_window.mainloop()
             else:
                 print("La contraseña no es correcta")
                 self.ErrorPassLabel.config(fg="White")
