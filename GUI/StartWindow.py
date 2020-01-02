@@ -42,12 +42,8 @@ class StartWindow(XinguWindow):
 
             if self.PasswordEntry.get() == "Password":
                 print("Correcto")
-<<<<<<< HEAD
-                self.main_window = MainWindow()
-=======
                 self.ErrorPassLabel.config(fg="Purple")
-                main_window = MainWindow()
->>>>>>> 778c434aa732ed0f36cdbaaf7cce0d44d37cc240
+                self.main_window = MainWindow()
                 self.withdraw()
                 #main_window.mainloop()
             else:
