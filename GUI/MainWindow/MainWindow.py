@@ -23,7 +23,7 @@ class MainWindow(XinguWindow):
 class OptionsFrame(Frame):
 
     def __init__(self, root_window):
-        super().__init__(root_window, bg="Grey", width=800, height=150)
+        super().__init__(root_window, bg="Grey", width=725, height=75)
 
         # Introduction of the view mode
 
@@ -62,18 +62,42 @@ class OptionsFrame(Frame):
         self.year_option = StringVar(self)
         self.year_option.set(self.year_option_list[0])
         self.YearOM = OptionMenu(self, self.year_option, *self.year_option_list)
-        self.YearOM.config(width=10, font=('Calibri', 14))
+        self.YearOM.config(width=7, font=('Calibri', 14))
         self.YearOM.place(x=370,y=10)
+
+        # Visualization button
+
+        self.ViewButton = Button(self, text="Visualizar", font=('Calibri', 14), width=50)
+        self.ViewButton.bind("<Button-1>",self.Visualization)
+        self.ViewButton.place(x=10, y=40)
 
         # Expense button
 
-        self.ExpenseButton = Button(self, text="Nuevo gasto")
+        self.ExpenseButton = Button(self, text="Nuevo\ngasto", font=('Calibri', 14), width=8, height=3)
         self.ExpenseButton.bind("<Button-1>",self.NewExpenseWindow)
-        self.ExpenseButton.place(x=700, y=10) # anchor=N)
+        self.ExpenseButton.place(x=480, y=10) # anchor=N)
+
+        # Income button
+
+        self.IncomeButton = Button(self, text="Nuevo\ningreso", font=('Calibri', 14), width=8, height=3)
+        self.IncomeButton.bind("<Button-1>",self.NewExpenseWindow)
+        self.IncomeButton.place(x=560, y=10) # anchor=N)
+
+        # Loan button
+
+        self.LoanButton = Button(self, text="Nuevo\npréstamo", font=('Calibri', 14), width=8, height=3)
+        self.LoanButton.bind("<Button-1>",self.NewExpenseWindow)
+        self.LoanButton.place(x=640, y=10) # anchor=N)
+
+        # Introduction of the frame in MainWindow
+
         self.place(x=0, y=0)
 
-    def NewExpenseWindow(self,event):
+    def NewExpenseWindow(self, event):
         self.expense_window = ExpenseWindow()
+
+    def Visualization(self, event):
+        pass
 
 
 
