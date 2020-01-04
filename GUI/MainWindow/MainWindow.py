@@ -95,16 +95,17 @@ class OptionsFrame(Frame):
 
 
     def Visualization(self, event):
+        pass
+    
+        #import sqlite3
 
-        import sqlite3
+        #self.connection = sqlite3.connect("DataBases/Prueba")
+        #self.cursor = self.connection.cursor()
+        #self.cursor.execute("SELECT * FROM EXPENSES;")
+        #self.results = self.cursor.fetchall()
 
-        self.connection = sqlite3.connect("DataBases/Prueba")
-        self.cursor = self.connection.cursor()
-        self.cursor.execute("SELECT * FROM EXPENSES;")
-        self.results = self.cursor.fetchall()
-
-        for row in self.results:
-            print(row)
+        #for row in self.results:
+        #    print(row)
 
         #self.visualization_month = 1
         #self.visualization_year = 2020
