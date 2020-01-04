@@ -80,23 +80,29 @@ class OptionsFrame(Frame):
         # Income button
 
         self.IncomeButton = Button(self, text="Nuevo\ningreso", font=('Calibri', 14), width=8, height=3)
-        self.IncomeButton.bind("<Button-1>",self.NewExpenseWindow)
+        self.IncomeButton.bind("<Button-1>",self.NewIncomeWindow)
         self.IncomeButton.place(x=560, y=10) # anchor=N)
 
         # Loan button
 
         self.LoanButton = Button(self, text="Nuevo\npréstamo", font=('Calibri', 14), width=8, height=3)
-        self.LoanButton.bind("<Button-1>",self.NewExpenseWindow)
+        self.LoanButton.bind("<Button-1>",self.NewLoanWindow)
         self.LoanButton.place(x=640, y=10) # anchor=N)
 
         # Introduction of the frame in MainWindow
 
         self.place(x=0, y=0)
 
+    def Visualization(self, event):
+        pass
+
     def NewExpenseWindow(self, event):
         self.expense_window = ExpenseWindow()
 
-    def Visualization(self, event):
+    def NewIncomeWindow(self, event):
+        pass
+
+    def NewLoanWindow(self, event):
         pass
 
 
