@@ -2,6 +2,7 @@ from tkinter import *
 import tkinter.ttk as ttk
 from GUI.XinguWindow import XinguWindow
 import DB.DataManagement as DB
+from datetime import datetime  
 
 class LoanWindow(XinguWindow):
 
@@ -68,27 +69,45 @@ class LoanWindow(XinguWindow):
         self.OKButton.bind("<Button-1>",self.Send)
         self.OKButton.place(x=225, y=410, anchor=N)
 
+        #Error 
+        self.ErrorLabel = Label(self.LoanFrame, text="Parámetros Incorrectos", bg="Purple", fg="Purple", font=("Calibri", 14))
+        self.ErrorLabel.place(x=225, y=420, anchor=N)
+
     #Action of the button
     def Send(self, event):
-        #pass
-        #imports
-        from datetime import datetime
-
+  
         self.date = self.DateEntry.get()
-        self.datetime = datetime.strptime(self.date, '%d/%m/%Y')
-
+        self.field = self.mode_field.get()
         self.person = self.PersonCombo.get()
-
-        if self.mode_field.get() == "Entrante":
-            self.value = float(self.ValueEntry.get())
-        elif self.mode_field.get() == "Saliente":
-            self.value = - float(self.ValueEntry.get())
-
+        self.value = self.ValueEntry.get()
         self.concept = self.ConceptEntry.get()
         self.observations = self.ObservationsText.get("1.0",'end-1c')
 
-        DB.InsertLoan(self.root_window.DB_Name, self.datetime, self.person, self.value, self.concept, self.observations)
+        if self.CheckParameters() == TRUE:
+            self.ErrorLabel.config(fg="Purple")
 
+            self.datetime = datetime.strptime(self.date, '%d/%m/%Y') 
+            if self.field == "Entrante":
+                self.value = float(self.ValueEntry.get())
+            elif self.field == "Saliente":
+                self.value = - float(self.ValueEntry.get())
+
+            DB.InsertLoan(self.root_window.DB_Name, self.datetime, self.person, self.value, self.concept, self.observations)
+        else:
+            self.ErrorLabel.config(fg="White")
         #self.destroy()
-    
-    
+
+    def CheckParameters(self):      
+        
+        try:
+            datetime.strptime(self.date, '%d/%m/%Y')
+            float(self.ValueEntry.get())
+
+            if not self.person: raise Exception
+            if not self.field: raise Exception
+            if not self.concept: raise Exception
+
+            return(TRUE)
+
+        except:
+            return(FALSE)

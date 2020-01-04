@@ -1,5 +1,6 @@
 from tkinter import *
 from GUI.XinguWindow import XinguWindow
+from datetime import datetime
 
 class ExpenseWindow(XinguWindow):
         
@@ -56,21 +57,43 @@ class ExpenseWindow(XinguWindow):
         self.OKButton.bind("<Button-1>",self.Send)
         self.OKButton.place(x=225, y=360, anchor=N)
 
+        #Error 
+        self.ErrorLabel = Label(self.ExpenseFrame, text="Parámetros Incorrectos", bg="Purple", fg="Purple", font=("Calibri", 14))
+        self.ErrorLabel.place(x=225, y=410, anchor=N)
+
     #Action of the button
     def Send(self, event):
-        #pass
         #imports
         from DB.DataManagement import InsertExpense
-        from datetime import datetime
-
+        
         self.date = self.DateEntry.get()
-        self.datetime = datetime.strptime(self.date, '%d/%m/%Y')
-
         self.field = self.mode_field.get()
         self.value = - float(self.ValueEntry.get())
         self.concept = self.ConceptEntry.get()
         self.observations = self.ObservationsText.get("1.0",'end-1c')
 
-        InsertExpense(self.root_window.DB_Name, self.datetime, self.field, self.value, self.concept, self.observations)
+        if self.CheckParameters() == TRUE:
+            self.ErrorLabel.config(fg="Purple")
+            self.datetime = datetime.strptime(self.date, '%d/%m/%Y')
+            self.value = - float(self.ValueEntry.get())
 
+            InsertExpense(self.root_window.DB_Name, self.datetime, self.field, self.value, self.concept, self.observations)
+
+        else:
+            self.ErrorLabel.config(fg="White")
+        
         #self.destroy()
+
+    def CheckParameters(self):      
+        
+        try:
+            datetime.strptime(self.date, '%d/%m/%Y')
+            float(self.ValueEntry.get())
+
+            if not self.field: raise Exception
+            if not self.concept: raise Exception
+
+            return(TRUE)
+
+        except:
+            return(FALSE)
