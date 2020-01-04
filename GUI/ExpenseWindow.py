@@ -6,7 +6,7 @@ class ExpenseWindow(XinguWindow):
     def __init__(self):
         super().__init__()
         
-        self.title("New expense")
+        self.title("Nuevo Gasto")
         self.ExpenseFrame=Frame(self,bg="Purple",width=450,height=450)
         self.ExpenseFrame.pack() #fill="both",expand="True")
 
@@ -21,7 +21,7 @@ class ExpenseWindow(XinguWindow):
         self.FieldLabel = Label(self.ExpenseFrame, text="Tipo:", bg="Purple", fg="White", font=("Calibri", 14))
         self.FieldLabel.place(x=50, y=100)
 
-        self.mode_field_list = ["Comida", "Hogar", "Transporte", "Ocio", "Ropa", "Viajes", "Caprichos", "Regalos", "Gasto mensual", "Ingreso mensual", "Ingreso puntual", "Otros"]
+        self.mode_field_list = ["Comida", "Hogar", "Transporte", "Ocio", "Ropa", "Viajes", "Caprichos", "Regalos", "Gasto mensual", "Otros"]
         self.mode_field = StringVar(self)
         self.mode_field.set(self.mode_field_list[0])
         self.ModeField = OptionMenu(self.ExpenseFrame, self.mode_field, *self.mode_field_list)
@@ -65,9 +65,10 @@ class ExpenseWindow(XinguWindow):
         self.datetime = datetime.strptime(self.date, '%d/%m/%Y')
 
         self.field = self.mode_field.get()
-        self.value = float(self.ValueEntry.get())
+        self.value = - float(self.ValueEntry.get())
         self.concept = self.ConceptEntry.get()
         self.observations = self.ObservationsText.get("1.0",'end-1c')
 
         InsertExpense("Prueba", self.datetime, self.field, self.value, self.concept, self.observations)
 
+        self.destroy()
