@@ -15,12 +15,14 @@ class StartWindow(XinguWindow):
         self.DataBaseLabel.place(x=50, y=250)
         
         self.DataBaseEntry = Entry(self.StartFrame, font=("Calibri", 18))
+        self.DataBaseEntry.bind("<Return>", self.Login) 
         self.DataBaseEntry.place(x=50, y=280)
         
         self.PasswordLabel = Label(self.StartFrame, text="Contraseña:", bg="Purple", fg="White", font=("Calibri", 18))
         self.PasswordLabel.place(x=50, y=340)
         
         self.PasswordEntry = Entry(self.StartFrame, font=("Calibri", 18), show="·")
+        self.PasswordEntry.bind("<Return>", self.Login) 
         self.PasswordEntry.place(x=50, y=370)
         
         self.LoginButton = Button(self.StartFrame, text="Entrar", font=("Calibri", 18), height=2, width=10)
