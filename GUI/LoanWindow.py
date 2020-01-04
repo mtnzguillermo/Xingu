@@ -5,8 +5,10 @@ import DB.DataManagement as DB
 
 class LoanWindow(XinguWindow):
 
-    def __init__(self):
+    def __init__(self, root_window):
         super().__init__()
+
+        self.root_window = root_window
         
         self.title("Nuevo Préstamo")
         self.LoanFrame=Frame(self,bg="Purple",width=450,height=500)
@@ -89,7 +91,7 @@ class LoanWindow(XinguWindow):
         self.concept = self.ConceptEntry.get()
         self.observations = self.ObservationsText.get("1.0",'end-1c')
 
-        DB.InsertLoan("Prueba", self.datetime, self.person, self.value, self.concept, self.observations)
+        DB.InsertLoan(self.root_window.DB_Name, self.datetime, self.person, self.value, self.concept, self.observations)
 
         #self.destroy()
     

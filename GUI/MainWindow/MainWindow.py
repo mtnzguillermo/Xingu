@@ -7,8 +7,10 @@ from DB.DataManagement import *
 
 class MainWindow(XinguWindow):
 
-    def __init__(self):
+    def __init__(self, DB_Name):
         super().__init__()
+
+        self.DB_Name = DB_Name
         
         # Window configurationm
         self.title("Xingú")
@@ -24,6 +26,8 @@ class OptionsFrame(Frame):
 
     def __init__(self, root_window):
         super().__init__(root_window, bg="Grey", width=725, height=75)
+
+        self.root_window = root_window
 
         # Introduction of the view mode
 
@@ -96,7 +100,7 @@ class OptionsFrame(Frame):
 
     def Visualization(self, event):
         pass
-    
+
         #import sqlite3
 
         #self.connection = sqlite3.connect("DataBases/Prueba")
@@ -116,13 +120,13 @@ class OptionsFrame(Frame):
         #    print(expense)
 
     def NewExpenseWindow(self, event):
-        self.expense_window = ExpenseWindow()
+        self.expense_window = ExpenseWindow(self.root_window)
 
     def NewIncomeWindow(self, event):
-        self.income_window = IncomeWindow()
+        self.income_window = IncomeWindow(self.root_window)
 
     def NewLoanWindow(self, event):
-        self.loan_window = LoanWindow()
+        self.loan_window = LoanWindow(self.root_window)
 
 class DataFrame(Frame):
 

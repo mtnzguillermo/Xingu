@@ -3,10 +3,8 @@ from datetime import datetime
 
 def InsertExpense(DB_Name, date, field, value, concept, observations):
 
-    DB_Route = "DataBases/"
-
     # Opening connection and creating the cursor
-    connection = sqlite3.connect(DB_Route + DB_Name)
+    connection = sqlite3.connect(DB_Name)
     cursor = connection.cursor()
 
     # Generation of the new code for the expense
@@ -32,10 +30,8 @@ def InsertExpense(DB_Name, date, field, value, concept, observations):
 
 def InsertLoan(DB_Name, date, person, value, concept, observations):
 
-    DB_Route = "DataBases/"
-
     # Opening connection and creating the cursor
-    connection = sqlite3.connect(DB_Route + DB_Name)
+    connection = sqlite3.connect(DB_Name)
     cursor = connection.cursor()
 
     # Generation of the new code for the loan
