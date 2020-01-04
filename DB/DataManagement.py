@@ -49,10 +49,9 @@ def InsertLoan(DB_Name, date, person, value, concept, observations):
     #money_values = (code, virtual, liquid, month_indicator, month_savings)
 
     # Updating DB
-    cursor.execute("INSERT INTO EXPENSES VALUES(?, ?, ?, ?, ?, ?)", loan_values)
+    cursor.execute("INSERT INTO LOANS VALUES(?, ?, ?, ?, ?, ?)", loan_values)
     #cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?, ?)", money_values)
-    #UpdateMoney(cursor, code)
-    UpdateDebts()
+    UpdateDebts(cursor, person, value)
 
     # Final actions and closing connection
     connection.commit()
@@ -103,9 +102,6 @@ def GetDebtPeople(DB_Name):
 
     return(people)
 
-def UpdateDebts():
-    pass
-
 def UpdateMoney(cursor, code, value):
 
     cursor.execute("SELECT * FROM MONEY WHERE CODE < ? ORDER BY CODE DESC;", [code])
@@ -119,6 +115,33 @@ def UpdateMoney(cursor, code, value):
 
     cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?)", money_values)
 
+def UpdateDebts(cursor, person, value):
+    #pass
+
+    cursor.execute("SELECT NAME FROM DEBTS")
+    results = cursor.fetchall()
+
+    people = []
+    for row in results:
+        people.append(row[0])
+
+    if person in people:
+        cursor.execute("SELECT VALUE FROM DEBTS WHERE NAME=?;", [person])
+        current_value_cursor = cursor.fetchone()
+        print(current_value_cursor)
+        current_value = current_value_cursor[0]
+
+        value = current_value + value
+
+        debts_values = [value, person]
+        cursor.execute("UPDATE DEBTS SET VALUE=? WHERE NAME=?", debts_values)
+
+    else:
+        # Sumarizing all input parameters
+        debts_values = [person, value]
+        # Updating DB
+        cursor.execute("INSERT INTO DEBTS VALUES(?, ?)", debts_values)
+        
 def CalculateMonthIndicator():
     return 0.0
 
