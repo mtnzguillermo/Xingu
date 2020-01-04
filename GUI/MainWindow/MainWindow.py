@@ -17,8 +17,9 @@ class MainWindow(XinguWindow):
         # Setting fullscreen
         self.geometry("%dx%d+0+0" % (self.winfo_screenwidth(), self.winfo_screenheight()))
 
-        # Building options' frame
+        # Building frames
         self.OptFrame = OptionsFrame(self)
+        self.DatFrame = DataFrame(self)
 
 class OptionsFrame(Frame):
 
@@ -105,6 +106,15 @@ class OptionsFrame(Frame):
     def NewLoanWindow(self, event):
         pass
 
+class DataFrame(Frame):
 
+    def __init__(self, root_window):
+        super().__init__(root_window, bg="Yellow", width=725, height=700)
+
+        
+
+        # Introduction of the frame in MainWindow
+
+        self.place(x=0, y=75)
 
 
