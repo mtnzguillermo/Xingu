@@ -1,6 +1,7 @@
 from tkinter import *
 from GUI.XinguWindow import XinguWindow
 from GUI.ExpenseWindow import ExpenseWindow
+from DB.DataManagement import *
 
 class MainWindow(XinguWindow):
 
@@ -94,8 +95,26 @@ class OptionsFrame(Frame):
 
         self.place(x=0, y=0)
 
+
     def Visualization(self, event):
-        pass
+
+        import sqlite3
+
+        self.connection = sqlite3.connect("DataBases/Prueba")
+        self.cursor = self.connection.cursor()
+        self.cursor.execute("SELECT * FROM EXPENSES;")
+        self.results = self.cursor.fetchall()
+
+        for row in self.results:
+            print(row)
+
+        #self.visualization_month = 1
+        #self.visualization_year = 2020
+        #self.visualization_codes = GetCodes(self.visualization_month, self.visualization_year)
+        #self.visualization_expenses = GetExpenses(self.visualization_codes)
+
+        #for expense in self.visualization_expenses:
+        #    print(expense)
 
     def NewExpenseWindow(self, event):
         self.expense_window = ExpenseWindow()
@@ -111,7 +130,7 @@ class DataFrame(Frame):
     def __init__(self, root_window):
         super().__init__(root_window, bg="Yellow", width=725, height=700)
 
-        
+
 
         # Introduction of the frame in MainWindow
 

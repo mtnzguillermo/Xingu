@@ -10,7 +10,9 @@ def InsertExpense(DB_Name, date, field, value, concept, observations):
     # TO DO: Calcular code
     code = 20200103001
 
-    ExpenseCursor.execute("INSERT INTO EXPENSES VALUES(code, date, field, value, concept, observations)")
+    values = (code, date, field, value, concept, observations)
+
+    ExpenseCursor.execute("INSERT INTO EXPENSES VALUES(?, ?, ?, ?, ?, ?)", values)
 
     ExpenseConnection.commit()
 

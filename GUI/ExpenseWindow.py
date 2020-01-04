@@ -62,10 +62,10 @@ class ExpenseWindow(XinguWindow):
         from datetime import datetime
 
         self.date = self.DateEntry.get()
-        self.datetime = datetime.strptime(self.date, '%d/%m/%y')
+        self.datetime = datetime.strptime(self.date, '%d/%m/%Y')
 
         self.field = self.mode_field.get()
-        self.value = self.ValueEntry.get()
+        self.value = float(self.ValueEntry.get())
         self.concept = self.ConceptEntry.get()
         self.observations = self.ObservationsText.get("1.0",'end-1c')
 
