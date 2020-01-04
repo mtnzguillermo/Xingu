@@ -1,6 +1,8 @@
 from tkinter import *
 from GUI.XinguWindow import XinguWindow
 from GUI.ExpenseWindow import ExpenseWindow
+from GUI.IncomeWindow import IncomeWindow
+from GUI.LoanWindow import LoanWindow
 from DB.DataManagement import *
 
 class MainWindow(XinguWindow):
@@ -10,10 +12,6 @@ class MainWindow(XinguWindow):
         
         # Window configurationm
         self.title("Xingú")
-
-        # Main frame configuration
-        #self.StartFrame=Frame(self, bg="Purple")
-        #self.StartFrame.pack(fill="both", expand="True")
 
         # Setting fullscreen
         self.geometry("%dx%d+0+0" % (self.winfo_screenwidth(), self.winfo_screenheight()))
@@ -120,10 +118,10 @@ class OptionsFrame(Frame):
         self.expense_window = ExpenseWindow()
 
     def NewIncomeWindow(self, event):
-        pass
+        self.income_window = IncomeWindow()
 
     def NewLoanWindow(self, event):
-        pass
+        self.loan_window = LoanWindow()
 
 class DataFrame(Frame):
 

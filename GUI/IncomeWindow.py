@@ -1,12 +1,12 @@
 from tkinter import *
 from GUI.XinguWindow import XinguWindow
 
-class LoanWindow(XinguWindow):
+class IncomeWindow(XinguWindow):
 
     def __init__(self):
         super().__init__()
         
-        self.title("New loan")
+        self.title("New income")
         self.ExpenseFrame=Frame(self,bg="Purple",width=450,height=450)
         self.ExpenseFrame.pack() #fill="both",expand="True")
 
