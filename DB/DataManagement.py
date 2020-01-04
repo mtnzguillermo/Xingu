@@ -84,3 +84,26 @@ def GetExpense(code):
 
 def GetLoan(code):
     pass
+
+def GetDebtPeople(DB_Name):
+
+    #PROVISIONAL   
+    import sqlite3
+    ExpenseRoute = "DataBases/"
+
+    # Opening connection and creating the cursor
+    connection = sqlite3.connect(ExpenseRoute + DB_Name)
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT NAME FROM DEBTS")
+    results = cursor.fetchall()
+
+    people = []
+    for row in results:
+        people.append(row[0])
+
+    # Final actions and closing connection
+    connection.commit()
+    connection.close()
+
+    return(people)
