@@ -38,11 +38,7 @@ class LoanWindow(XinguWindow):
 
         self.PersonCombo = ttk.Combobox(self.LoanFrame)
 
-        #PROVISIONAL    
-        DB_Name = "Prueba"
-
-        #self.PersonCombo["values"] = self.GetDebtPeople(DB_Name)
-        self.PersonCombo["values"] = DB.GetDebtPeople(DB_Name)
+        self.PersonCombo["values"] = DB.GetDebtPeople(self.root_window.DB_Name)
         self.PersonCombo.config(width=18, font=('Calibri', 14))
         self.PersonCombo.place(x=200, y=150)
 

@@ -50,6 +50,7 @@ def InsertLoan(DB_Name, date, person, value, concept, observations):
     # Updating DB
     cursor.execute("INSERT INTO EXPENSES VALUES(?, ?, ?, ?, ?, ?)", loan_values)
     cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?, ?)", money_values)
+    UpdateDebts()
 
     # Final actions and closing connection
     connection.commit()
@@ -83,12 +84,8 @@ def GetLoan(code):
 
 def GetDebtPeople(DB_Name):
 
-    #PROVISIONAL   
-    import sqlite3
-    ExpenseRoute = "DataBases/"
-
     # Opening connection and creating the cursor
-    connection = sqlite3.connect(ExpenseRoute + DB_Name)
+    connection = sqlite3.connect(DB_Name)
     cursor = connection.cursor()
 
     cursor.execute("SELECT NAME FROM DEBTS")
@@ -103,3 +100,6 @@ def GetDebtPeople(DB_Name):
     connection.close()
 
     return(people)
+
+def UpdateDebts():
+    pass
