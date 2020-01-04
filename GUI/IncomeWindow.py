@@ -6,7 +6,7 @@ class IncomeWindow(XinguWindow):
     def __init__(self):
         super().__init__()
         
-        self.title("New income")
+        self.title("Nuevo Ingreso")
         self.ExpenseFrame=Frame(self,bg="Purple",width=450,height=450)
         self.ExpenseFrame.pack() #fill="both",expand="True")
 
@@ -21,7 +21,7 @@ class IncomeWindow(XinguWindow):
         self.FieldLabel = Label(self.ExpenseFrame, text="Tipo:", bg="Purple", fg="White", font=("Calibri", 14))
         self.FieldLabel.place(x=50, y=100)
 
-        self.mode_field_list = ["Comida", "Hogar", "Transporte", "Ocio", "Ropa", "Viajes", "Caprichos", "Regalos", "Gasto mensual", "Ingreso mensual", "Ingreso puntual", "Otros"]
+        self.mode_field_list = ["Puntual", "Mensual"]
         self.mode_field = StringVar(self)
         self.mode_field.set(self.mode_field_list[0])
         self.ModeField = OptionMenu(self.ExpenseFrame, self.mode_field, *self.mode_field_list)
@@ -50,7 +50,7 @@ class IncomeWindow(XinguWindow):
         self.ObservationsText.place(x=200, y=250)
 
         #Button
-        self.OKButton = Button(self.ExpenseFrame, text="Introducir Gasto", font=("Calibri", 14), height=2, width=20)
+        self.OKButton = Button(self.ExpenseFrame, text="Introducir Ingreso", font=("Calibri", 14), height=2, width=20)
         self.OKButton.bind("<Button-1>",self.Send)
         self.OKButton.place(x=225, y=360, anchor=N)
 
@@ -70,3 +70,5 @@ class IncomeWindow(XinguWindow):
         self.observations = self.ObservationsText.get("1.0",'end-1c')
 
         InsertExpense("Prueba", self.datetime, self.field, self.value, self.concept, self.observations)
+
+        self.destroy()
