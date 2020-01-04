@@ -71,4 +71,4 @@ class ExpenseWindow(XinguWindow):
 
         InsertExpense("Prueba", self.datetime, self.field, self.value, self.concept, self.observations)
 
-        self.destroy()
+        #self.destroy()

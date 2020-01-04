@@ -1,17 +1,18 @@
 import sqlite3
+from datetime import datetime
 
 def InsertExpense(DB_Name, date, field, value, concept, observations):
 
-    ExpenseRoute = "DataBases/"
+    DB_Route = "DataBases/"
 
     # Opening connection and creating the cursor
-    ExpenseConnection = sqlite3.connect(ExpenseRoute + DB_Name)
-    ExpenseCursor = ExpenseConnection.cursor()
+    connection = sqlite3.connect(DB_Route + DB_Name)
+    cursor = connection.cursor()
 
-    # TO DO: Calcular code
+    # Generation of the new code for the expense
+    code = GenerateNewCode(cursor, date)
 
-    # Harcode
-    code = 20200103001
+    ################## Harcode
     virtual = 0.0
     liquid = 0.0
     month_indicator = 0.0
@@ -19,35 +20,67 @@ def InsertExpense(DB_Name, date, field, value, concept, observations):
 
     # Sumarizing all input parameters
     expense_values = (code, date, field, value, concept, observations)
-    money_values = (code, date, virtual, liquid, month_indicator, month_savings)
+    money_values = (code, virtual, liquid, month_indicator, month_savings)
 
     # Updating DB
-    ExpenseCursor.execute("INSERT INTO EXPENSES VALUES(?, ?, ?, ?, ?, ?)", expense_values)
-    ExpenseCursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?, ?, ?)", money_values)
+    cursor.execute("INSERT INTO EXPENSES VALUES(?, ?, ?, ?, ?, ?)", expense_values)
+    cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?, ?)", money_values)
 
     # Final actions and closing connection
-    ExpenseConnection.commit()
-    ExpenseConnection.close()
+    connection.commit()
+    connection.close()
 
 def InsertLoan(DB_Name, date, person, value, concept, observations):
 
-    LoanRoute = "DataBases/"
+    DB_Route = "DataBases/"
 
-    LoanConnection = sqlite3.connect(LoanRoute + DB_Name)
-    LoanCursor = LoanConnection.cursor()
+    # Opening connection and creating the cursor
+    connection = sqlite3.connect(DB_Route + DB_Name)
+    cursor = connection.cursor()
 
-    # TO DO: Calcular code
-    LoanCursor.execute("INSERT INTO LOANS VALUES(code, date, person, value, concept, observations)")
+    # Generation of the new code for the loan
+    code = GenerateNewCode(cursor, date)
 
-    LoanConnection.commit()
+    ################## Harcode
+    virtual = 0.0
+    liquid = 0.0
+    month_indicator = 0.0
+    month_savings = 0.0
 
-    LoanConnection.close()
+    # Sumarizing all input parameters
+    loan_values = (code, date, person, value, concept, observations)
+    money_values = (code, virtual, liquid, month_indicator, month_savings)
 
-def GetCodes(month, year):
+    # Updating DB
+    cursor.execute("INSERT INTO EXPENSES VALUES(?, ?, ?, ?, ?, ?)", loan_values)
+    cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?, ?)", money_values)
+
+    # Final actions and closing connection
+    connection.commit()
+    connection.close()
+
+def GenerateNewCode(cursor, date):
+
+    # Turning the date into a entry code
+    day_code = int(date.strftime("%Y%m%d")+"000")
+
+    # Setting limits of the day codes
+    limits = [day_code, day_code+1000]
+
+    # Checking DB for codes from the same day
+    cursor.execute("SELECT CODE FROM MONEY WHERE CODE BETWEEN ? and ?;", limits)
+    results = cursor.fetchall()
+
+    # Generating new code
+    if len(results) == 0:
+        new_code = day_code+1
+    else:
+        new_code = max(max(results))+1
+
+    return new_code
+
+def GetExpense(code):
     pass
 
-def GetExpenses(codes):
-    pass
-
-def GetLoans(codes):
+def GetLoan(code):
     pass
