@@ -11,18 +11,19 @@ def InsertExpense(DB_Name, date, field, value, concept, observations):
     code = GenerateNewCode(cursor, date)
 
     ################## Harcode
-    virtual = 0.0
-    liquid = 0.0
-    month_indicator = 0.0
-    month_savings = 0.0
+    #virtual = 0.0
+    #liquid = 0.0
+    #month_indicator = 0.0
+    #month_savings = 0.0
 
     # Sumarizing all input parameters
     expense_values = (code, date, field, value, concept, observations)
-    money_values = (code, virtual, liquid, month_indicator, month_savings)
+    #money_values = (code, virtual, liquid, month_indicator, month_savings)
 
     # Updating DB
     cursor.execute("INSERT INTO EXPENSES VALUES(?, ?, ?, ?, ?, ?)", expense_values)
-    cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?, ?)", money_values)
+    #cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?, ?)", money_values)
+    UpdateMoney(cursor, code, value)
 
     # Final actions and closing connection
     connection.commit()
@@ -38,18 +39,19 @@ def InsertLoan(DB_Name, date, person, value, concept, observations):
     code = GenerateNewCode(cursor, date)
 
     ################## Harcode
-    virtual = 0.0
-    liquid = 0.0
-    month_indicator = 0.0
-    month_savings = 0.0
+    #virtual = 0.0
+    #liquid = 0.0
+    #month_indicator = 0.0
+    #month_savings = 0.0
 
     # Sumarizing all input parameters
     loan_values = (code, date, person, value, concept, observations)
-    money_values = (code, virtual, liquid, month_indicator, month_savings)
+    #money_values = (code, virtual, liquid, month_indicator, month_savings)
 
     # Updating DB
     cursor.execute("INSERT INTO EXPENSES VALUES(?, ?, ?, ?, ?, ?)", loan_values)
-    cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?, ?)", money_values)
+    #cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?, ?)", money_values)
+    #UpdateMoney(cursor, code)
     UpdateDebts()
 
     # Final actions and closing connection
@@ -103,3 +105,22 @@ def GetDebtPeople(DB_Name):
 
 def UpdateDebts():
     pass
+
+def UpdateMoney(cursor, code, value):
+
+    cursor.execute("SELECT * FROM MONEY WHERE CODE < ? ORDER BY CODE DESC;", [code])
+    results = cursor.fetchone()
+    print(results)
+
+    total_money = results[1]+value
+    month_indicator = CalculateMonthIndicator()
+    month_savings = CalculateMonthSavings()
+    money_values = [code, total_money, month_indicator, month_savings]
+
+    cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?)", money_values)
+
+def CalculateMonthIndicator():
+    return 0.0
+
+def CalculateMonthSavings():
+    return 0.0
