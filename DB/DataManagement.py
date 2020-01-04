@@ -35,22 +35,11 @@ def InsertLoan(DB_Name, date, person, value, concept, observations):
     connection = sqlite3.connect(DB_Name)
     cursor = connection.cursor()
 
-    # Generation of the new code for the loan
-    code = GenerateNewCode(cursor, date)
-
-    ################## Harcode
-    #virtual = 0.0
-    #liquid = 0.0
-    #month_indicator = 0.0
-    #month_savings = 0.0
-
     # Sumarizing all input parameters
-    loan_values = (code, date, person, value, concept, observations)
-    #money_values = (code, virtual, liquid, month_indicator, month_savings)
+    loan_values = (date, person, value, concept, observations)
 
     # Updating DB
-    cursor.execute("INSERT INTO LOANS VALUES(?, ?, ?, ?, ?, ?)", loan_values)
-    #cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?, ?)", money_values)
+    cursor.execute("INSERT INTO LOANS VALUES(?, ?, ?, ?, ?)", loan_values)
     UpdateDebts(cursor, person, value)
 
     # Final actions and closing connection
@@ -106,7 +95,6 @@ def UpdateMoney(cursor, code, value):
 
     cursor.execute("SELECT * FROM MONEY WHERE CODE < ? ORDER BY CODE DESC;", [code])
     results = cursor.fetchone()
-    print(results)
 
     total_money = results[1]+value
     month_indicator = CalculateMonthIndicator()
@@ -116,7 +104,6 @@ def UpdateMoney(cursor, code, value):
     cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?)", money_values)
 
 def UpdateDebts(cursor, person, value):
-    #pass
 
     cursor.execute("SELECT NAME FROM DEBTS")
     results = cursor.fetchall()
@@ -128,7 +115,6 @@ def UpdateDebts(cursor, person, value):
     if person in people:
         cursor.execute("SELECT VALUE FROM DEBTS WHERE NAME=?;", [person])
         current_value_cursor = cursor.fetchone()
-        print(current_value_cursor)
         current_value = current_value_cursor[0]
 
         value = current_value + value
