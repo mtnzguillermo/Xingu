@@ -93,8 +93,13 @@ class LoanWindow(XinguWindow):
                 self.value = - float(self.ValueEntry.get())
 
             DB.InsertLoan(self.root_window.DB_Name, self.datetime, self.person, self.value, self.concept, self.observations)
-        else:
+
+            #try: self.destroy()
+            #except: pass
+
+        else: 
             self.ErrorLabel.config(fg="White")
+        
         #self.destroy()
 
     def CheckParameters(self):      
