@@ -8,21 +8,13 @@ def InsertExpense(DB_Name, date, field, value, concept, observations):
     cursor = connection.cursor()
 
     # Generation of the new code for the expense
-    code = GenerateNewCode(cursor, date)
+    code = GenerateNewCode(cursor, date, field)
 
-    ################## Harcode
-    #virtual = 0.0
-    #liquid = 0.0
-    #month_indicator = 0.0
-    #month_savings = 0.0
-
-    # Sumarizing all input parameters
+    # Updating EXPENSES table in DB
     expense_values = (code, date, field, value, concept, observations)
-    #money_values = (code, virtual, liquid, month_indicator, month_savings)
-
-    # Updating DB
     cursor.execute("INSERT INTO EXPENSES VALUES(?, ?, ?, ?, ?, ?)", expense_values)
-    #cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?, ?)", money_values)
+    
+    # Updating MONEY table in DB
     UpdateMoney(cursor, code, value)
 
     # Final actions and closing connection
@@ -35,21 +27,24 @@ def InsertLoan(DB_Name, date, person, value, concept, observations):
     connection = sqlite3.connect(DB_Name)
     cursor = connection.cursor()
 
-    # Sumarizing all input parameters
+    # Updating LOANS table in DB
     loan_values = (date, person, value, concept, observations)
-
-    # Updating DB
     cursor.execute("INSERT INTO LOANS VALUES(?, ?, ?, ?, ?)", loan_values)
+
+    # Updating DEBTS table in DB
     UpdateDebts(cursor, person, value)
 
     # Final actions and closing connection
     connection.commit()
     connection.close()
 
-def GenerateNewCode(cursor, date):
+def GenerateNewCode(cursor, date, field):
 
     # Turning the date into a entry code
-    day_code = int(date.strftime("%Y%m%d")+"000")
+    if field == "Mensual":
+        day_code = int(date.strftime("%Y%m")+"00000")
+    else:
+        day_code = int(date.strftime("%Y%m%d")+"000")
 
     # Setting limits of the day codes
     limits = [day_code, day_code+1000]
