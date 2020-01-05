@@ -92,8 +92,8 @@ def UpdateMoney(cursor, code, value):
     results = cursor.fetchone()
 
     total_money = results[1]+value
-    month_indicator = CalculateMonthIndicator()
-    month_savings = CalculateMonthSavings()
+    [month_indicator, month_savings] = CalculateMoneyParameters(cursor, code)
+    #month_savings = CalculateMonthSavings(cursor, code)
     money_values = [code, total_money, month_indicator, month_savings]
 
     cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?)", money_values)
@@ -123,8 +123,45 @@ def UpdateDebts(cursor, person, value):
         # Updating DB
         cursor.execute("INSERT INTO DEBTS VALUES(?, ?)", debts_values)
         
-def CalculateMonthIndicator():
-    return 0.0
+def CalculateMoneyParameters(cursor, code):
 
-def CalculateMonthSavings():
-    return 0.0
+    # Reading code
+    code_str = str(code)
+    year = code_str[0:4]
+    month = code_str[4:6]
+    day = code_str[6:8]
+
+    # Extracting all monthly incomes/expenses
+    limits = [year+month+"00000", year+month+"01000"]
+    cursor.execute("SELECT * FROM EXPENSES WHERE CODE BETWEEN ? and ?;", limits)
+    monthly_data = cursor.fetchall()
+
+    # Calculating total monthly income
+    monthly_income = 0
+    for data in monthly_data:
+        monthly_income += data[3]
+
+    # Extracting all expenses/incomes during the month until the given day
+    limits = [year+month+"01000", str(code)]
+    cursor.execute("SELECT * FROM EXPENSES WHERE CODE BETWEEN ? and ?;", limits)
+    month_data = cursor.fetchall()
+
+    # Calculating total month expense at the given day
+    month_expense = 0
+    for data in month_data:
+        month_expense -= data[3]
+    
+    # Calculating days in the given month
+    from calendar import monthrange
+    month_days = monthrange(int(year), int(month))
+    month_length = month_days[1]
+
+    # Calculating month indicator and savings
+    projected_expense = monthly_income*float(day)/month_length
+    month_indicator = projected_expense-month_expense
+    month_savings = monthly_income-month_expense
+
+    return([month_indicator, month_savings])
+
+#def CalculateMonthSavings(cursor, code):
+#    return 0.0
