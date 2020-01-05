@@ -71,7 +71,7 @@ class LoanWindow(XinguWindow):
 
         #Error 
         self.ErrorLabel = Label(self.LoanFrame, text="Parámetros Incorrectos", bg="Purple", fg="Purple", font=("Calibri", 14))
-        self.ErrorLabel.place(x=225, y=420, anchor=N)
+        self.ErrorLabel.place(x=225, y=460, anchor=N)
 
     #Action of the button
     def Send(self, event):
