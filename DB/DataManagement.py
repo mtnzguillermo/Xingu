@@ -88,15 +88,39 @@ def GetDebtPeople(DB_Name):
 
 def UpdateMoney(cursor, code, value):
 
+    print("Let's update the MONEY TABLE")
+    # Selecting previous monet entry
     cursor.execute("SELECT * FROM MONEY WHERE CODE < ? ORDER BY CODE DESC;", [code])
-    results = cursor.fetchone()
+    previous_entry = cursor.fetchone()
 
-    total_money = results[1]+value
+    # Calculating new entry parameters
+    total_money = previous_entry[1]+value
     [month_indicator, month_savings] = CalculateMoneyParameters(cursor, code)
-    #month_savings = CalculateMonthSavings(cursor, code)
     money_values = [code, total_money, month_indicator, month_savings]
 
+    # Inserting entry
     cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?)", money_values)
+    print("Entry inserted")
+
+    # Searching for later entries to update
+    cursor.execute("SELECT * FROM MONEY WHERE CODE > ? ORDER BY CODE ASC;", [code])
+    entries_to_update = cursor.fetchall()
+
+    # Updating all later entries
+    for entry in entries_to_update:
+
+        # Searching for the expense asociated with the present MONEY entry
+        cursor.execute("SELECT * FROM EXPENSES WHERE CODE = ?;", [entry[0]])
+        corresponding_expense = cursor.fetchone()
+
+        # Calculating new parameters
+        total_money += corresponding_expense[3]
+        [month_indicator, month_savings] = CalculateMoneyParameters(cursor, entry[0])
+        money_values = [total_money, month_indicator, month_savings, entry[0]]
+
+        # Updating entry
+        cursor.execute("UPDATE MONEY SET VIRTUAL = ?, MONTH_INDICATOR = ?, MONTH_SAVINGS = ? WHERE CODE = ?", money_values)
+
 
 def UpdateDebts(cursor, person, value):
 
@@ -162,6 +186,3 @@ def CalculateMoneyParameters(cursor, code):
     month_savings = monthly_income-month_expense
 
     return([month_indicator, month_savings])
-
-#def CalculateMonthSavings(cursor, code):
-#    return 0.0
