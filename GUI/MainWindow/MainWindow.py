@@ -155,17 +155,13 @@ class DataFrame(Frame):
 
         #root_window.OptFrame.Visualize()
 
-           
-    def VisualizeMonthMode(self, year, month):
-
-        # Table (Monthly)
-        
         #TO DO: Get Title from the selection (Month & Year)
-        self.title = Label(self, text= month + " " + year, fg="White", background="Purple", font=("Calibri", 16))
+        self.title = Label(self, text= "Mes y Año", fg="White", background="Purple", font=("Calibri", 16))
 
         self.headers = ["Fecha", "Campo", "Valor", "Concepto", "Total", "Indicador", "Ahorro"]
 
         self._tree = ttk.Treeview(self, height=25, columns=self.headers, show="headings")
+
         self.title.pack(side=TOP, fill="x")
 
         # Scrollbars 
@@ -183,8 +179,24 @@ class DataFrame(Frame):
             self._tree.heading(header, text=header.title())
             self._tree.column(header, stretch=False, width=101)
 
+        self.contador = 1
+        
+    def VisualizeMonthMode(self, year, month):
+
+        # Table (Monthly)
+
+        self.title.config(text = month + " " + year)
+
+        #for header in self.headers:
+        #    self._tree.heading(header, text=header.title())
+        #    self._tree.column(header, stretch=False, width=101)
+
+        for i in self._tree.get_children():
+            self._tree.delete(i)
+
+        self.contador += 1
         #TO DO: Get parameters from DB
-        cursor = [("Celda1", "Celda2"), ("Celda3", "Celda4")]
+        cursor = [(str(self.contador), "Celda2"), ("Celda3", "Celda4")]
         
         for row in cursor:
             self.add_row(row)
