@@ -5,6 +5,8 @@ from GUI.IncomeWindow import IncomeWindow
 from GUI.LoanWindow import LoanWindow
 from DB.DataManagement import *
 
+import tkinter.ttk as ttk
+
 class MainWindow(XinguWindow):
 
     def __init__(self, DB_Name):
@@ -133,10 +135,46 @@ class DataFrame(Frame):
     def __init__(self, root_window):
         super().__init__(root_window, bg="Yellow", width=725, height=700)
 
-
-
         # Introduction of the frame in MainWindow
-
         self.place(x=0, y=75)
 
+        # Table (Monthly)
+        
+        #TO DO: Get Title from the selection (Month & Year)
+        self.title = Label(self, text="Title", fg="White", background="Purple", font=("Calibri", 16))
+
+        self.headers = ["Fecha", "Campo", "Valor", "Concepto", "Total", "Indicador", "Ahorro"]
+
+        self._tree = ttk.Treeview(self, height=25, columns=self.headers, show="headings")
+        self.title.pack(side=TOP, fill="x")
+
+        # Scrollbars 
+        vsb = ttk.Scrollbar(self, orient="vertical", command=self._tree.yview)
+        vsb.pack(side='right', fill='y')
+        #hsb = ttk.Scrollbar(self, orient="horizontal", command=self._tree.xview)
+        #hsb.pack(side='bottom', fill='x')
+        #Not sure if hsb is necessary 
+
+        #self._tree.configure(xscrollcommand=hsb.set, yscrollcommand=vsb.set)
+        self._tree.configure(yscrollcommand=vsb.set)
+        self._tree.pack(side="left")
+
+        for header in self.headers:
+            self._tree.heading(header, text=header.title())
+            self._tree.column(header, stretch=False, width=101)
+
+        #TO DO: Get parameters from DB
+        cursor = [("Celda1", "Celda2"), ("Celda3", "Celda4")]
+        
+        for row in cursor:
+            self.add_row(row)
+
+    def add_row(self, row):
+
+        self.item = 4
+        self._tree.insert('', 'end', values=row)
+        for i, self.item in enumerate(row):
+            col_width = 101
+            if self._tree.column(self.headers[i], width=None) < col_width:
+                    self._tree.column(self.headers[i], width=col_width)
 
