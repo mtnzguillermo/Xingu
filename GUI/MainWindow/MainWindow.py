@@ -21,8 +21,10 @@ class MainWindow(XinguWindow):
         self.geometry("%dx%d+0+0" % (self.winfo_screenwidth(), self.winfo_screenheight()))
 
         # Building frames
-        self.OptFrame = OptionsFrame(self)
         self.DatFrame = DataFrame(self)
+        self.OptFrame = OptionsFrame(self)
+        
+                
 
 class OptionsFrame(Frame):
 
@@ -74,7 +76,8 @@ class OptionsFrame(Frame):
         # Visualization button
 
         self.ViewButton = Button(self, text="Visualizar", font=('Calibri', 14), width=50)
-        self.ViewButton.bind("<Button-1>",self.Visualization)
+        print(root_window)
+        self.ViewButton.bind("<Button-1>",self.Visualize)
         self.ViewButton.place(x=10, y=40)
 
         # Expense button
@@ -99,9 +102,21 @@ class OptionsFrame(Frame):
 
         self.place(x=0, y=0)
 
+    def Visualize(self,event):
 
-    def Visualization(self, event):
-        pass
+        self.mode = self.mode_option.get()
+        self.year = self.year_option.get()
+
+        if self.mode == "Mes":
+            self.month = self.month_option.get()
+            self.root_window.DatFrame.VisualizeMonthMode(self.year, self.month)
+        else:
+            self.root_window.DatFrame.VisualizeYearMode(self.year)
+     
+
+    #def Visualization(self, event):
+
+        #self.root_window.DatFrame.Visualize()
 
         #import sqlite3
 
@@ -138,10 +153,15 @@ class DataFrame(Frame):
         # Introduction of the frame in MainWindow
         self.place(x=0, y=75)
 
+        #root_window.OptFrame.Visualize()
+
+           
+    def VisualizeMonthMode(self, year, month):
+
         # Table (Monthly)
         
         #TO DO: Get Title from the selection (Month & Year)
-        self.title = Label(self, text="Title", fg="White", background="Purple", font=("Calibri", 16))
+        self.title = Label(self, text= month + " " + year, fg="White", background="Purple", font=("Calibri", 16))
 
         self.headers = ["Fecha", "Campo", "Valor", "Concepto", "Total", "Indicador", "Ahorro"]
 
@@ -168,6 +188,9 @@ class DataFrame(Frame):
         
         for row in cursor:
             self.add_row(row)
+    
+    def VisualizeYearMode(self):
+        pass
 
     def add_row(self, row):
 
