@@ -61,31 +61,6 @@ def GenerateNewCode(cursor, date, field):
 
     return new_code
 
-def GetExpense(code):
-    pass
-
-def GetLoan(code):
-    pass
-
-def GetDebtPeople(DB_Name):
-
-    # Opening connection and creating the cursor
-    connection = sqlite3.connect(DB_Name)
-    cursor = connection.cursor()
-
-    cursor.execute("SELECT NAME FROM DEBTS")
-    results = cursor.fetchall()
-
-    people = []
-    for row in results:
-        people.append(row[0])
-
-    # Final actions and closing connection
-    connection.commit()
-    connection.close()
-
-    return(people)
-
 def UpdateMoney(cursor, code, value):
 
     print("Let's update the MONEY TABLE")
@@ -186,3 +161,85 @@ def CalculateMoneyParameters(cursor, code):
     month_savings = monthly_income-month_expense
 
     return([month_indicator, month_savings])
+
+def GetMonthExpenses(DB_Name, year, month):
+    
+    # Opening connection and creating the cursor
+    connection = sqlite3.connect(DB_Name)
+    cursor = connection.cursor()
+
+    # Reading all entry codes in the corresponding month
+    month_codes = GetMonthCodes(cursor, year, month)
+
+    # Extracting the data associated with each code from EXPENSES and MONEY tables
+    month_expenses = []
+    for code in month_codes:
+        expense_data = GetExpenseEntry(cursor, code)
+        money_data = GetMoneyEntry(cursor, code)
+        entry_data = expense_data[1:5] + money_data[1:]
+        print(entry_data)
+        month_expenses.append(entry_data)
+
+    # Final actions and closing connection
+    connection.commit()
+    connection.close()
+
+    return(month_expenses)
+
+def GetMonthCodes(cursor, year, month):
+
+    # Finding interval of codes to be extracted from the DB
+    # Limits are converted to strings to introduce them easily in the sqlite command
+    min_code = year*10000000+month*100000
+    max_code = min_code + 99999
+    limits = [str(min_code),str(max_code)]
+    
+    # Extracting all codes within the corresponding month
+    cursor.execute("SELECT CODE FROM MONEY WHERE CODE BETWEEN ? AND ?", limits)
+    db_output = cursor.fetchall()
+
+    # Converting DB output into a single list
+    month_codes = []
+    for line in db_output:
+        month_codes.append(line[0])
+
+    print(month_codes)
+    return(month_codes)
+
+def GetExpenseEntry(cursor, code):
+
+    # Reading open database to find the corresponding expense
+    cursor.execute("SELECT * FROM EXPENSES WHERE CODE = ?;", [str(code)])
+    expense = cursor.fetchone()
+
+    return(expense)
+
+def GetMoneyEntry(cursor, code):
+
+    # Reading open database to find the corresponding money entries
+    cursor.execute("SELECT * FROM MONEY WHERE CODE = ?;", [str(code)])
+    money_entry = cursor.fetchone()
+
+    return(money_entry)
+
+def GetLoanEntry(code):
+    pass
+
+def GetDebtPeople(DB_Name):
+
+    # Opening connection and creating the cursor
+    connection = sqlite3.connect(DB_Name)
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT NAME FROM DEBTS")
+    results = cursor.fetchall()
+
+    people = []
+    for row in results:
+        people.append(row[0])
+
+    # Final actions and closing connection
+    connection.commit()
+    connection.close()
+
+    return(people)
