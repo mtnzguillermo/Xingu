@@ -97,3 +97,8 @@ class ExpenseWindow(XinguWindow):
 
         except:
             return(FALSE)
+
+class EditExpenseWindow(ExpenseWindow):
+
+    def __init__(self, root_window):
+        super().__init__(root_window)
