@@ -24,7 +24,7 @@ class ExpenseWindow(XinguWindow):
         self.FieldLabel = Label(self.ExpenseFrame, text="Tipo:", bg="Purple", fg="White", font=("Calibri", 14))
         self.FieldLabel.place(x=50, y=100)
 
-        self.mode_field_list = ["Comida", "Hogar", "Transporte", "Ocio", "Ropa", "Viajes", "Caprichos", "Regalos", "Mensual", "Otros"]
+        self.mode_field_list = ["Comida", "Hogar", "Transporte", "Ocio", "Salud", "Ropa", "Viajes", "Caprichos", "Regalos", "Mensual", "Otros"]
         self.mode_field = StringVar(self)
         self.mode_field.set(self.mode_field_list[0])
         self.ModeField = OptionMenu(self.ExpenseFrame, self.mode_field, *self.mode_field_list)
