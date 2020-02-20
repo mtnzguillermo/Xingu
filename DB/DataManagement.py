@@ -63,7 +63,6 @@ def GenerateNewCode(cursor, date, field):
 
 def UpdateMoney(cursor, code, value):
 
-    print("Let's update the MONEY TABLE")
     # Selecting previous monet entry
     cursor.execute("SELECT * FROM MONEY WHERE CODE < ? ORDER BY CODE DESC;", [code])
     previous_entry = cursor.fetchone()
@@ -75,7 +74,6 @@ def UpdateMoney(cursor, code, value):
 
     # Inserting entry
     cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?)", money_values)
-    print("Entry inserted")
 
     # Searching for later entries to update
     cursor.execute("SELECT * FROM MONEY WHERE CODE > ? ORDER BY CODE ASC;", [code])
