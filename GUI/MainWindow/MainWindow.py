@@ -105,11 +105,12 @@ class OptionsFrame(Frame):
     def Visualize(self,event):
 
         self.mode = self.mode_option.get()
-        self.year = self.year_option.get()
+        self.year = int(self.year_option.get())
 
         if self.mode == "Mes":
-            self.month = self.month_option.get()
-            self.root_window.DatFrame.VisualizeMonthMode(self.year, self.month)
+            self.month_string = self.month_option.get()
+            self.month_integer = self.month_option_list.index(self.month_option.get()) + 1
+            self.root_window.DatFrame.VisualizeMonthMode(self.year, self.month_string, self.month_integer)
         else:
             self.root_window.DatFrame.VisualizeYearMode(self.year)
      
@@ -153,6 +154,8 @@ class DataFrame(Frame):
         # Introduction of the frame in MainWindow
         self.place(x=0, y=75)
 
+        self.root_window = root_window
+
         #root_window.OptFrame.Visualize()
 
         #TO DO: Get Title from the selection (Month & Year)
@@ -179,13 +182,12 @@ class DataFrame(Frame):
             self._tree.heading(header, text=header.title())
             self._tree.column(header, stretch=False, width=101)
 
-        self.contador = 1
         
-    def VisualizeMonthMode(self, year, month):
+    def VisualizeMonthMode(self, year, month_string, month_integer):
 
         # Table (Monthly)
 
-        self.title.config(text = month + " " + year)
+        self.title.config(text = month_string + " " + str(year))
 
         #for header in self.headers:
         #    self._tree.heading(header, text=header.title())
@@ -194,11 +196,12 @@ class DataFrame(Frame):
         for i in self._tree.get_children():
             self._tree.delete(i)
 
-        self.contador += 1
         #TO DO: Get parameters from DB
-        cursor = [(str(self.contador), "Celda2"), ("Celda3", "Celda4")]
+        self.visualization_data = GetMonthExpenses(self.root_window.DB_Name, year, month_integer)
+
+        #cursor = [(str(self.contador), "Celda2"), ("Celda3", "Celda4")]
         
-        for row in cursor:
+        for row in self.visualization_data:
             self.add_row(row)
     
     def VisualizeYearMode(self):
