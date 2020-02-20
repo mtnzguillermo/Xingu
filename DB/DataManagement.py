@@ -87,7 +87,8 @@ def UpdateMoney(cursor, code, value):
         corresponding_expense = cursor.fetchone()
 
         # Calculating new parameters
-        total_money += round(corresponding_expense[3],2)
+        total_money += corresponding_expense[3]
+        total_money = round(total_money,2)
         [month_indicator, month_savings] = CalculateMoneyParameters(cursor, entry[0])
         money_values = [total_money, month_indicator, month_savings, entry[0]]
 
