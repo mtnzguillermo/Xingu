@@ -38,6 +38,23 @@ def InsertLoan(DB_Name, date, person, value, concept, observations):
     connection.commit()
     connection.close()
 
+def EditExpense(DB_Name, code, date, field, value, concept, observations):
+
+    # Opening connection and creating the cursor
+    connection = sqlite3.connect(DB_Name)
+    cursor = connection.cursor()
+
+    # Updating EXPENSES table in DB
+    expense_values = (code, date, field, value, concept, observations)
+    cursor.execute("INSERT INTO EXPENSES VALUES(?, ?, ?, ?, ?, ?)", expense_values)
+    
+    # Updating MONEY table in DB
+    UpdateMoney(cursor, code, value)
+
+    # Final actions and closing connection
+    connection.commit()
+    connection.close()
+
 def GenerateNewCode(cursor, date, field):
 
     # Turning the date into a entry code

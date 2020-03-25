@@ -102,3 +102,5 @@ class EditExpenseWindow(ExpenseWindow):
 
     def __init__(self, root_window):
         super().__init__(root_window)
+
+        self.DateEntry.config(text="09/05/2020")
