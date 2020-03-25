@@ -174,7 +174,7 @@ def GetMonthExpenses(DB_Name, year, month):
     for code in month_codes:
         expense_data = GetExpenseEntry(cursor, code)
         money_data = GetMoneyEntry(cursor, code)
-        entry_data = expense_data[1:5] + money_data[1:]
+        entry_data = expense_data[0:5] + money_data[1:]
         print(entry_data)
         month_expenses.append(entry_data)
 

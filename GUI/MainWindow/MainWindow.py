@@ -158,7 +158,6 @@ class DataFrame(Frame):
 
         #root_window.OptFrame.Visualize()
 
-        #TO DO: Get Title from the selection (Month & Year)
         self.title = Label(self, text= "Mes y Año", fg="White", background="Purple", font=("Calibri", 16))
 
         self.headers = ["Fecha", "Campo", "Valor", "Concepto", "Total", "Indicador", "Ahorro"]
@@ -181,7 +180,8 @@ class DataFrame(Frame):
         for header in self.headers:
             self._tree.heading(header, text=header.title())
             self._tree.column(header, stretch=False, width=101)
-
+        
+        self._tree.bind("<Double-1>", self.DataDoubleClick)
         
     def VisualizeMonthMode(self, year, month_string, month_integer):
 
@@ -202,7 +202,7 @@ class DataFrame(Frame):
         #cursor = [(str(self.contador), "Celda2"), ("Celda3", "Celda4")]
         
         for row in self.visualization_data:
-            self.add_row(row)
+            self.add_row(row[1:])
     
     def VisualizeYearMode(self):
         pass
@@ -216,3 +216,15 @@ class DataFrame(Frame):
             if self._tree.column(self.headers[i], width=None) < col_width:
                     self._tree.column(self.headers[i], width=col_width)
 
+    def DataDoubleClick(self, event):
+        self.item = self._tree.selection()[0] # now you got the item on that tree
+        #self.expense_window = ExpenseWindow(self.root_window)
+        #print ("you clicked on " + self.item)
+
+        self.item_int = int(self.item[1:]) - 1 
+        self.clicked_code = self.visualization_data[self.item_int][0]
+
+        #self.EditExpenseWindow = EditExpenseWindow(self.root_window, self.clicked_code)
+
+        #print ("Data " + str(self.visualization_data[self.item_int]))
+        #print ("Code " + str(self.visualization_data[self.item_int][0]))
