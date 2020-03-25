@@ -63,6 +63,9 @@ def GetSingleExpense(DB_Name, code):
 
     expense = GetExpenseEntry(cursor, code)
 
+    connection.comit()
+    connection.close()
+
     return(list(expense))
 
 def GenerateNewCode(cursor, date, field):
