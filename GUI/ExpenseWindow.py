@@ -96,6 +96,7 @@ class ExpenseWindow(XinguWindow):
             return(TRUE)
 
         except:
+            
             return(FALSE)
 
 class EditExpenseWindow(ExpenseWindow):

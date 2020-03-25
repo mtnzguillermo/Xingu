@@ -105,7 +105,6 @@ def UpdateMoney(cursor, code, value):
 
         # Calculating new parameters
         total_money += corresponding_expense[3]
-        total_money = round(total_money,2)
         [month_indicator, month_savings] = CalculateMoneyParameters(cursor, entry[0])
         money_values = [total_money, month_indicator, month_savings, entry[0]]
 
@@ -173,8 +172,8 @@ def CalculateMoneyParameters(cursor, code):
 
     # Calculating month indicator and savings
     projected_expense = monthly_income*float(day)/month_length
-    month_indicator = round(projected_expense-month_expense,2)
-    month_savings = round(monthly_income-month_expense,2)
+    month_indicator = projected_expense-month_expense
+    month_savings = monthly_income-month_expense
 
     return([month_indicator, month_savings])
 
@@ -192,7 +191,8 @@ def GetMonthExpenses(DB_Name, year, month):
     for code in month_codes:
         expense_data = GetExpenseEntry(cursor, code)
         money_data = GetMoneyEntry(cursor, code)
-        entry_data = expense_data[1:5] + money_data[1:]
+        entry_data = expense_data[0:5] + money_data[1:]
+        print(entry_data)
         month_expenses.append(entry_data)
 
     # Final actions and closing connection
@@ -210,7 +210,7 @@ def GetMonthCodes(cursor, year, month):
     limits = [str(min_code),str(max_code)]
     
     # Extracting all codes within the corresponding month
-    cursor.execute("SELECT CODE FROM MONEY WHERE CODE BETWEEN ? AND ? ORDER BY CODE ASC", limits)
+    cursor.execute("SELECT CODE FROM MONEY WHERE CODE BETWEEN ? AND ?", limits)
     db_output = cursor.fetchall()
 
     # Converting DB output into a single list
@@ -218,6 +218,7 @@ def GetMonthCodes(cursor, year, month):
     for line in db_output:
         month_codes.append(line[0])
 
+    print(month_codes)
     return(month_codes)
 
 def GetExpenseEntry(cursor, code):
