@@ -1,6 +1,6 @@
 from tkinter import *
 from GUI.XinguWindow import XinguWindow
-from GUI.ExpenseWindow import ExpenseWindow
+from GUI.ExpenseWindow import *
 from GUI.IncomeWindow import IncomeWindow
 from GUI.LoanWindow import LoanWindow
 from DB.DataManagement import *
@@ -224,7 +224,7 @@ class DataFrame(Frame):
         self.item_int = int(self.item[1:]) - 1 
         self.clicked_code = self.visualization_data[self.item_int][0]
 
-        #self.EditExpenseWindow = EditExpenseWindow(self.root_window, self.clicked_code)
+        self.EditExpenseWindow = EditExpenseWindow(self.root_window, self.clicked_code)
 
         #print ("Data " + str(self.visualization_data[self.item_int]))
         #print ("Code " + str(self.visualization_data[self.item_int][0]))

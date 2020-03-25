@@ -63,8 +63,6 @@ class ExpenseWindow(XinguWindow):
 
     #Action of the button
     def Send(self, event):
-        #imports
-        from DB.DataManagement import InsertExpense
         
         self.date = self.DateEntry.get()
         self.field = self.mode_field.get()
@@ -77,12 +75,18 @@ class ExpenseWindow(XinguWindow):
             self.datetime = datetime.strptime(self.date, '%d/%m/%Y')
             self.value = - float(self.ValueEntry.get())
 
-            InsertExpense(self.root_window.DB_Name, self.datetime, self.field, self.value, self.concept, self.observations)
+            self.DB_action()
 
         else:
             self.ErrorLabel.config(fg="White")
         
         #self.destroy()
+
+    def DB_action(self):
+
+        from DB.DataManagement import InsertExpense
+
+        InsertExpense(self.root_window.DB_Name, self.datetime, self.field, self.value, self.concept, self.observations)
 
     def CheckParameters(self):      
         
@@ -101,7 +105,18 @@ class ExpenseWindow(XinguWindow):
 
 class EditExpenseWindow(ExpenseWindow):
 
-    def __init__(self, root_window):
+    def __init__(self, root_window, expense_code):
         super().__init__(root_window)
 
+        self.expense_code = expense_code
+
+        #data = GetExpenseEntry(expense_code)
+
         self.DateEntry.config(text="09/05/2020")
+
+    def DB_action(self):
+
+        from DB.DataManagement import EditExpense
+
+        EditExpense(self.root_window.DB_Name, self.expense_code, self.datetime, self.field, self.value, self.concept, self.observations)
+
