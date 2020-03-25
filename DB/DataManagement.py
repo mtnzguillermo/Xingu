@@ -45,8 +45,8 @@ def EditExpense(DB_Name, code, date, field, value, concept, observations):
     cursor = connection.cursor()
 
     # Updating EXPENSES table in DB
-    expense_values = (code, date, field, value, concept, observations)
-    cursor.execute("INSERT INTO EXPENSES VALUES(?, ?, ?, ?, ?, ?)", expense_values)
+    expense_values = (date, field, value, concept, observations, code)
+    cursor.execute("UPDATE EXPENSES SET DATE = ?, FIELD = ?, VALUE = ?, CONCEPT = ?, OBSERVATIONS = ? WHERE CODE = ?", expense_values)
     
     # Updating MONEY table in DB
     UpdateMoney(cursor, code, value)
@@ -54,6 +54,16 @@ def EditExpense(DB_Name, code, date, field, value, concept, observations):
     # Final actions and closing connection
     connection.commit()
     connection.close()
+
+def GetSingleExpense(DB_Name, code):
+
+    # Opening connection and creating the cursor
+    connection = sqlite3.connect(DB_Name)
+    cursor = connection.cursor()
+
+    expense = GetExpenseEntry(cursor, code)
+
+    return(list(expense))
 
 def GenerateNewCode(cursor, date, field):
 
