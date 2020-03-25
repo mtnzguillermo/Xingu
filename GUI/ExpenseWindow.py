@@ -110,9 +110,20 @@ class EditExpenseWindow(ExpenseWindow):
 
         self.expense_code = expense_code
 
-        #data = GetExpenseEntry(expense_code)
+        from DB.DataManagement import GetSingleExpense
+        data = GetSingleExpense(self.root_window.DB_Name, expense_code)
 
-        self.DateEntry.config(text="09/05/2020")
+        #Get the data in correct format
+        fecha = data[1]
+        year = fecha[0:4]
+        month = fecha[5:7]
+        day = fecha[8:10]
+
+        self.DateEntry.insert(0, day+"/"+month+"/"+year)
+        self.mode_field.set(data[2])
+        self.ValueEntry.insert(0, data[3])
+        self.ConceptEntry.insert(0, data[4])
+        self.ObservationsText.insert (1.0, data[5])
 
     def DB_action(self):
 
