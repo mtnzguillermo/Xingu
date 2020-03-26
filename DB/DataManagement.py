@@ -15,7 +15,8 @@ def InsertExpense(DB_Name, date, field, value, concept, observations):
     cursor.execute("INSERT INTO EXPENSES VALUES(?, ?, ?, ?, ?, ?)", expense_values)
     
     # Updating MONEY table in DB
-    UpdateMoney(cursor, code, value)
+    InsertMoneyEntry(cursor, code, value)
+    UpdateLaterMoneyEntries(cursor, code, value)
 
     # Final actions and closing connection
     connection.commit()
@@ -49,7 +50,8 @@ def EditExpense(DB_Name, code, date, field, value, concept, observations):
     cursor.execute("UPDATE EXPENSES SET DATE = ?, FIELD = ?, VALUE = ?, CONCEPT = ?, OBSERVATIONS = ? WHERE CODE = ?", expense_values)
     
     # Updating MONEY table in DB
-    UpdateMoney(cursor, code, value)
+    EditMoneyEntry(cursor, code, value)
+    UpdateLaterMoneyEntries(cursor, code, value)
 
     # Final actions and closing connection
     connection.commit()
@@ -91,7 +93,27 @@ def GenerateNewCode(cursor, date, field):
 
     return new_code
 
-def UpdateMoney(cursor, code, value):
+def InsertMoneyEntry(cursor, code, value):
+
+    # Calculating new entry parameters from the previous entry
+    money_values = MoneyEntryFields(cursor, code, value)
+
+    # Inserting entry
+    cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?)", money_values)
+
+def EditMoneyEntry(cursor, code, value):
+
+    # Calculating new entry parameters from the previous entry
+    money_values = MoneyEntryFields(cursor, code, value)
+
+    # Reordering money_values for UPDATE command
+    money_values.pop(0)
+    money_values.append(code)
+
+    # Editing entry
+    cursor.execute("UPDATE MONEY SET VIRTUAL = ?, MONTH_INDICATOR = ?, MONTH_SAVINGS = ? WHERE CODE = ?", money_values)
+
+def MoneyEntryFields(cursor, code, value):
 
     # Selecting previous monet entry
     cursor.execute("SELECT * FROM MONEY WHERE CODE < ? ORDER BY CODE DESC;", [code])
@@ -102,8 +124,14 @@ def UpdateMoney(cursor, code, value):
     [month_indicator, month_savings] = CalculateMoneyParameters(cursor, code)
     money_values = [code, total_money, month_indicator, month_savings]
 
-    # Inserting entry
-    cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?)", money_values)
+    return(money_values)
+
+def UpdateLaterMoneyEntries(cursor, code, value):
+
+    # Getting total money in the entry just edited/inserted
+    cursor.execute("SELECT * FROM MONEY WHERE CODE = ?;", [code])
+    start_entry = cursor.fetchone()
+    total_money = start_entry[1]
 
     # Searching for later entries to update
     cursor.execute("SELECT * FROM MONEY WHERE CODE > ? ORDER BY CODE ASC;", [code])
@@ -223,7 +251,7 @@ def GetMonthCodes(cursor, year, month):
     limits = [str(min_code),str(max_code)]
     
     # Extracting all codes within the corresponding month
-    cursor.execute("SELECT CODE FROM MONEY WHERE CODE BETWEEN ? AND ?", limits)
+    cursor.execute("SELECT CODE FROM MONEY WHERE CODE BETWEEN ? AND ? ORDER BY CODE ASC", limits)
     db_output = cursor.fetchall()
 
     # Converting DB output into a single list
