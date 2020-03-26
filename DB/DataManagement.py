@@ -16,7 +16,7 @@ def InsertExpense(DB_Name, date, field, value, concept, observations):
     
     # Updating MONEY table in DB
     InsertMoneyEntry(cursor, code, value)
-    UpdateLaterMoneyEntries(cursor, code, value)
+    UpdateLaterMoneyEntries(cursor, code)
 
     # Final actions and closing connection
     connection.commit()
@@ -51,7 +51,24 @@ def EditExpense(DB_Name, code, date, field, value, concept, observations):
     
     # Updating MONEY table in DB
     EditMoneyEntry(cursor, code, value)
-    UpdateLaterMoneyEntries(cursor, code, value)
+    UpdateLaterMoneyEntries(cursor, code)
+
+    # Final actions and closing connection
+    connection.commit()
+    connection.close()
+
+def DeleteExpense(DB_Name, code):
+
+    # Opening connection and creating the cursor
+    connection = sqlite3.connect(DB_Name)
+    cursor = connection.cursor()
+
+    # Deleting entry from EXPENSES table
+    cursor.execute("DELETE FROM EXPENSES WHERE CODE = ?", [code])
+
+    # Updating MONEY table in DB
+    cursor.execute("DELETE FROM MONEY WHERE CODE = ?", [code])
+    UpdateLaterMoneyEntries(cursor, code)
 
     # Final actions and closing connection
     connection.commit()
@@ -126,10 +143,10 @@ def MoneyEntryFields(cursor, code, value):
 
     return(money_values)
 
-def UpdateLaterMoneyEntries(cursor, code, value):
+def UpdateLaterMoneyEntries(cursor, code):
 
     # Getting total money in the entry just edited/inserted
-    cursor.execute("SELECT * FROM MONEY WHERE CODE = ?;", [code])
+    cursor.execute("SELECT * FROM MONEY WHERE CODE <= ? ORDER BY CODE DESC;", [code])
     start_entry = cursor.fetchone()
     total_money = start_entry[1]
 

@@ -123,6 +123,9 @@ class EditExpenseWindow(ExpenseWindow):
         from DB.DataManagement import GetSingleExpense
         data = GetSingleExpense(self.root_window.DB_Name, expense_code)
 
+        # Saving entry code for later use
+        self.edited_expense_code = data[0]
+
         #Get the data in correct format
         fecha = data[1]
         year = fecha[0:4]
@@ -164,7 +167,9 @@ class EditExpenseWindow(ExpenseWindow):
     #Action of the Confirm Button
     def Confirm(self, event):
 
-        pass
+        from DB.DataManagement import DeleteExpense
+
+        DeleteExpense(self.root_window.DB_Name, self.edited_expense_code)
 
         #TODO: Remove Expense
 
