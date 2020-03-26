@@ -39,19 +39,22 @@ def InsertLoan(DB_Name, date, person, value, concept, observations):
     connection.commit()
     connection.close()
 
-def EditExpense(DB_Name, code, date, field, value, concept, observations):
+def EditExpense(DB_Name, old_code, date, field, value, concept, observations):
 
     # Opening connection and creating the cursor
     connection = sqlite3.connect(DB_Name)
     cursor = connection.cursor()
 
+    # Generation of the new code for the expense
+    new_code = GenerateNewCode(cursor, date, field)
+
     # Updating EXPENSES table in DB
-    expense_values = (date, field, value, concept, observations, code)
-    cursor.execute("UPDATE EXPENSES SET DATE = ?, FIELD = ?, VALUE = ?, CONCEPT = ?, OBSERVATIONS = ? WHERE CODE = ?", expense_values)
+    expense_values = (new_code, date, field, value, concept, observations, old_code)
+    cursor.execute("UPDATE EXPENSES SET CODE = ?, DATE = ?, FIELD = ?, VALUE = ?, CONCEPT = ?, OBSERVATIONS = ? WHERE CODE = ?", expense_values)
     
     # Updating MONEY table in DB
-    EditMoneyEntry(cursor, code, value)
-    UpdateLaterMoneyEntries(cursor, code)
+    EditMoneyEntry(cursor, old_code, new_code, value)
+    UpdateLaterMoneyEntries(cursor, min(old_code, new_code))
 
     # Final actions and closing connection
     connection.commit()
@@ -118,17 +121,16 @@ def InsertMoneyEntry(cursor, code, value):
     # Inserting entry
     cursor.execute("INSERT INTO MONEY VALUES(?, ?, ?, ?)", money_values)
 
-def EditMoneyEntry(cursor, code, value):
+def EditMoneyEntry(cursor, old_code, new_code, value):
 
     # Calculating new entry parameters from the previous entry
-    money_values = MoneyEntryFields(cursor, code, value)
+    money_values = MoneyEntryFields(cursor, new_code, value)
 
     # Reordering money_values for UPDATE command
-    money_values.pop(0)
-    money_values.append(code)
+    money_values.append(old_code)
 
     # Editing entry
-    cursor.execute("UPDATE MONEY SET VIRTUAL = ?, MONTH_INDICATOR = ?, MONTH_SAVINGS = ? WHERE CODE = ?", money_values)
+    cursor.execute("UPDATE MONEY SET CODE = ?, VIRTUAL = ?, MONTH_INDICATOR = ?, MONTH_SAVINGS = ? WHERE CODE = ?", money_values)
 
 def MoneyEntryFields(cursor, code, value):
 
