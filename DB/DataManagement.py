@@ -139,7 +139,7 @@ def MoneyEntryFields(cursor, code, value):
     previous_entry = cursor.fetchone()
 
     # Calculating new entry parameters
-    total_money = previous_entry[1]+value
+    total_money = round(previous_entry[1]+value, 2)
     [month_indicator, month_savings] = CalculateMoneyParameters(cursor, code)
     money_values = [code, total_money, month_indicator, month_savings]
 
@@ -164,7 +164,7 @@ def UpdateLaterMoneyEntries(cursor, code):
         corresponding_expense = cursor.fetchone()
 
         # Calculating new parameters
-        total_money += corresponding_expense[3]
+        total_money = round(total_money + corresponding_expense[3], 2)
         [month_indicator, month_savings] = CalculateMoneyParameters(cursor, entry[0])
         money_values = [total_money, month_indicator, month_savings, entry[0]]
 
@@ -232,8 +232,8 @@ def CalculateMoneyParameters(cursor, code):
 
     # Calculating month indicator and savings
     projected_expense = monthly_income*float(day)/month_length
-    month_indicator = projected_expense-month_expense
-    month_savings = monthly_income-month_expense
+    month_indicator = round(projected_expense-month_expense, 2)
+    month_savings = round(monthly_income-month_expense, 2)
 
     return([month_indicator, month_savings])
 
