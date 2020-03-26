@@ -110,6 +110,8 @@ class EditExpenseWindow(ExpenseWindow):
 
         self.expense_code = expense_code
 
+        self.title("Editar Gasto")
+
         from DB.DataManagement import GetSingleExpense
         data = GetSingleExpense(self.root_window.DB_Name, expense_code)
 
@@ -121,7 +123,7 @@ class EditExpenseWindow(ExpenseWindow):
 
         self.DateEntry.insert(0, day+"/"+month+"/"+year)
         self.mode_field.set(data[2])
-        self.ValueEntry.insert(0, data[3])
+        self.ValueEntry.insert(0, -data[3])
         self.ConceptEntry.insert(0, data[4])
         self.ObservationsText.insert (1.0, data[5])
 
