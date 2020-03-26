@@ -63,7 +63,7 @@ def GetSingleExpense(DB_Name, code):
 
     expense = GetExpenseEntry(cursor, code)
 
-    connection.comit()
+    connection.commit()
     connection.close()
 
     return(list(expense))

@@ -196,21 +196,23 @@ class DataFrame(Frame):
         for i in self._tree.get_children():
             self._tree.delete(i)
 
-        #TO DO: Get parameters from DB
+        #Get parameters from DB
         self.visualization_data = GetMonthExpenses(self.root_window.DB_Name, year, month_integer)
 
         #cursor = [(str(self.contador), "Celda2"), ("Celda3", "Celda4")]
         
+        self.index_tree = 0
         for row in self.visualization_data:
-            self.add_row(row[1:])
+            self.index_tree  = self.index_tree + 1
+            self.add_row(row[1:], self.index_tree)
     
     def VisualizeYearMode(self):
         pass
 
-    def add_row(self, row):
+    def add_row(self, row, index_tree):
 
         self.item = 4
-        self._tree.insert('', 'end', values=row)
+        self._tree.insert('', 'end', id=index_tree, values=row)
         for i, self.item in enumerate(row):
             col_width = 101
             if self._tree.column(self.headers[i], width=None) < col_width:
@@ -219,9 +221,18 @@ class DataFrame(Frame):
     def DataDoubleClick(self, event):
         self.item = self._tree.selection()[0] # now you got the item on that tree
         #self.expense_window = ExpenseWindow(self.root_window)
-        #print ("you clicked on " + self.item)
+        print ("you clicked on " + self.item)
 
-        self.item_int = int(self.item[1:]) - 1 
+        #self.item_int= self.item[1:]
+        #print("you clicked on (int) " + self.item_int)
+
+        #self.item_dec = int(self.item_int, 16)
+        #print("you clicked on (dec) " + str(self.item_dec))
+
+        #self.item_int = int(self.item[1:]) - 1 
+        #self.clicked_code = self.visualization_data[self.item_dec][0]
+
+        self.item_int = int(self.item) - 1
         self.clicked_code = self.visualization_data[self.item_int][0]
 
         self.EditExpenseWindow = EditExpenseWindow(self.root_window, self.clicked_code)
