@@ -59,7 +59,7 @@ class DataFrame(Frame):
 
         #cursor = [(str(self.contador), "Celda2"), ("Celda3", "Celda4")]
         
-        self.index_tree = 0
+        self.index_tree = -1
         for row in self.visualization_data:
             self.index_tree  = self.index_tree + 1
             self.add_row(row[1:], self.index_tree)
@@ -90,7 +90,7 @@ class DataFrame(Frame):
         #self.item_int = int(self.item[1:]) - 1 
         #self.clicked_code = self.visualization_data[self.item_dec][0]
 
-        self.item_int = int(self.item) - 1
+        self.item_int = int(self.item) 
         self.clicked_code = self.visualization_data[self.item_int][0]
 
         self.EditExpenseWindow = EditExpenseWindow(self.root_window, self.clicked_code)

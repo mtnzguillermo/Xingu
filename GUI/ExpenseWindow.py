@@ -112,6 +112,14 @@ class EditExpenseWindow(ExpenseWindow):
 
         self.title("Editar Gasto")
 
+        self.OKButton.config(text="Editar Gasto", width=15)
+        self.OKButton.place(x=310, y=360, anchor=N)
+
+        #Remove Button
+        self.RemoveButton = Button(self.ExpenseFrame, text="Borrar Gasto", font=("Calibri", 14), height=2, width=15)
+        self.RemoveButton.bind("<Button-1>",self.AskForConfirmation)
+        self.RemoveButton.place(x=140, y=360, anchor=N)
+
         from DB.DataManagement import GetSingleExpense
         data = GetSingleExpense(self.root_window.DB_Name, expense_code)
 
@@ -133,3 +141,31 @@ class EditExpenseWindow(ExpenseWindow):
 
         EditExpense(self.root_window.DB_Name, self.expense_code, self.datetime, self.field, self.value, self.concept, self.observations)
 
+    #Action of the Remove Button
+    def AskForConfirmation(self, event):
+        
+        self.ConfigWindow = Tk()
+
+        self.ConfigWindow.title("")
+        self.ConfigWindowFrame=Frame(self.ConfigWindow,bg="White",width=200,height=200)
+        self.ConfigWindowFrame.pack() #fill="both",expand="True")
+
+        #Confirmation
+        self.ConfirmLabel = Label(self.ConfigWindowFrame, text="¿Estás seguro?", bg="White", fg="Purple", font=("Calibri", 14))
+        self.ConfirmLabel.place(x=100, y=50, anchor=N)
+
+        #Confirm Button
+        self.ConfirmButton = Button(self.ConfigWindowFrame, text="Sí", font=("Calibri", 14), height=2, width=10)
+        self.ConfirmButton.bind("<Button-1>",self.Confirm)
+        self.ConfirmButton.place(x=98, y=100, anchor=N)
+        
+        #self.destroy()
+
+    #Action of the Confirm Button
+    def Confirm(self, event):
+
+        pass
+
+        #TODO: Remove Expense
+
+        #self.destroy()
