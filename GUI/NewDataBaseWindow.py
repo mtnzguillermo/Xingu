@@ -1,6 +1,7 @@
 from tkinter import *
 from GUI.XinguWindow import XinguWindow
 from DB.CreateNewDB import CreateNewDB
+from DB.StoredDBs import CheckIfExists
 
 class NewDataBaseWindow(XinguWindow):
 
@@ -46,26 +47,37 @@ class NewDataBaseWindow(XinguWindow):
         self.CreateButton.bind("<Button-1>",self.CreateDB)
         self.CreateButton.place(x=175, y=445, anchor=N)
 
-        self.ErrorDBLabel = Label(self.DBFrame, text="Las contraseñas no coinciden", bg="Purple", fg="Purple", font=("Calibri", 12))
-        self.ErrorDBLabel.place(x=175, y=500, anchor=N)
+        self.ErrorDBPassLabel = Label(self.DBFrame, text="Las contraseñas no coinciden", bg="Purple", fg="Purple", font=("Calibri", 12))
+        self.ErrorDBPassLabel.place(x=175, y=500, anchor=N)
+
+        self.ErrorDBNameLabel = Label(self.DBFrame, text="La Base de Datos ya existe", bg="Purple", fg="Purple", font=("Calibri", 12))
+        self.ErrorDBNameLabel.place(x=175, y=400, anchor=N)
 
     def CreateDB(self,event):
 
-        
-        if self.NewPasswordEntry1.get() == self.NewPasswordEntry2.get():
+        if CheckIfExists(self.NewDataBaseEntry.get(), "DataBases/"):
 
-            self.ErrorDBLabel.config(fg="Purple")
+            self.ErrorDBNameLabel.config(fg="White")
 
-            self.DataBaseName = self.NewDataBaseEntry.get()
-            self.DataBasePassword = self.NewPasswordEntry1.get()
-            self.InitialMoney = self.InitMoneyEntry.get()
+        else:
 
-            CreateNewDB("DataBases/" + self.DataBaseName, self.DataBasePassword, self.InitialMoney)
+            self.ErrorDBNameLabel.config(fg="Purple")
 
-            self.destroy()
-        
-        else: 
+            if self.NewPasswordEntry1.get() == self.NewPasswordEntry2.get():
 
-            self.ErrorDBLabel.config(fg="White")
+                self.ErrorDBPassLabel.config(fg="Purple")
+
+                self.DataBaseName = self.NewDataBaseEntry.get()
+                self.DataBasePassword = self.NewPasswordEntry1.get()
+                self.InitialMoney = self.InitMoneyEntry.get()
+
+                CreateNewDB("DataBases/" + self.DataBaseName, self.DataBasePassword, self.InitialMoney)
+
+                self.destroy()
+            
+            else: 
+
+                self.ErrorDBPassLabel.config(fg="White")
+
 
         
