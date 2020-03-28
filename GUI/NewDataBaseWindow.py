@@ -1,5 +1,6 @@
 from tkinter import *
 from GUI.XinguWindow import XinguWindow
+from DB.CreateNewDB import CreateNewDB
 
 class NewDataBaseWindow(XinguWindow):
 
@@ -51,12 +52,20 @@ class NewDataBaseWindow(XinguWindow):
     def CreateDB(self,event):
 
         
-        if self.NewPasswordEntry1.get() != self.NewPasswordEntry2.get():
+        if self.NewPasswordEntry1.get() == self.NewPasswordEntry2.get():
 
-            self.ErrorDBLabel.config(fg="White")
+            self.ErrorDBLabel.config(fg="Purple")
+
+            self.DataBaseName = self.NewDataBaseEntry.get()
+            self.DataBasePassword = self.NewPasswordEntry1.get()
+            self.InitialMoney = self.InitMoneyEntry.get()
+
+            CreateNewDB("DataBases/" + self.DataBaseName, self.DataBasePassword, self.InitialMoney)
+
+            self.destroy()
         
         else: 
 
-            self.ErrorDBLabel.config(fg="Purple")
+            self.ErrorDBLabel.config(fg="White")
 
         
