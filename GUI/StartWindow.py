@@ -1,5 +1,6 @@
 from tkinter import *
 from GUI.XinguWindow import XinguWindow
+from DB.StoredDBs import *
 
 class StartWindow(XinguWindow):
 
@@ -35,17 +36,21 @@ class StartWindow(XinguWindow):
         self.ErrorPassLabel = Label(self.StartFrame, text="Contraseña Incorrecta", bg="Purple", fg="Purple", font=("Calibri", 12))
         self.ErrorPassLabel.place(x=169, y=405)
 
+        self.stored_DBs_path = "DataBases/"
+
     def Login(self,event):
         from GUI.MainWindow.MainWindow import MainWindow
 
-        if self.DataBaseEntry.get() == "Prueba":
+        self.DB_file_name = self.DataBaseEntry.get()
+
+        if CheckIfExists(self.DB_file_name, self.stored_DBs_path):
 
             self.ErrorDBLabel.config(fg="Purple")
 
-            if self.PasswordEntry.get() == "Password":
+            if CheckPassword(self.PasswordEntry.get(), self.DB_file_name, self.stored_DBs_path):
                 print("Correcto")
                 self.ErrorPassLabel.config(fg="Purple")
-                self.main_window = MainWindow("DataBases/Prueba")
+                self.main_window = MainWindow(self.stored_DBs_path+self.DB_file_name)
                 #self.withdraw()
                 self.destroy()
                 self.main_window.mainloop()
@@ -53,6 +58,6 @@ class StartWindow(XinguWindow):
                 print("La contraseña no es correcta")
                 self.ErrorPassLabel.config(fg="White")
         else:
-            print("El usuario no es correcto")
+            print("La base de datos no existe")
             self.ErrorDBLabel.config(fg="White")
             self.ErrorPassLabel.config(fg="Purple")
