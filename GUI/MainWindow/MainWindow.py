@@ -25,6 +25,11 @@ class MainWindow(XinguWindow):
         # Building frames
         self.DatFrame = DataFrame(self)
         self.OptFrame = OptionsFrame(self)
+
+        # Menu
+        self.editdb = Menu(self.menubar, tearoff=0)
+        self.editdb.add_command(label="Edit", command=self.donothing)
+        self.menubar.add_cascade(label="Data Base", menu=self.editdb)
         
                 
 class OptionsFrame(Frame):
