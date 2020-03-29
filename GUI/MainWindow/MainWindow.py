@@ -6,6 +6,8 @@ from GUI.LoanWindow import LoanWindow
 from DB.DataManagement import *
 from GUI.MainWindow.DataFrame import DataFrame
 from GUI.MainWindow.MonthPlotFrame import MonthPlotFrame
+from GUI.MainWindow.CheesePlotFrame import CheesePlotFrame
+from GUI.MainWindow.DebtsFrame import DebtsFrame
 
 #import tkinter.ttk as ttk
 
@@ -33,6 +35,8 @@ class MainWindow(XinguWindow):
         # Building window-size-demependent frames
         self.DatFrame = DataFrame(self)
         self.MonthPlFrame = MonthPlotFrame(self) # As a default, the plots for the current month are displayed
+        self.CheesePlFrame = CheesePlotFrame(self)
+        self.DebFrame = DebtsFrame(self)
 
         # Menu
         self.editdb = Menu(self.menubar, tearoff=0)
