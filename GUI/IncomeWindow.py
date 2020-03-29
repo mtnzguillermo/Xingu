@@ -10,6 +10,7 @@ class IncomeWindow(XinguWindow):
         self.root_window = root_window
         
         self.title("Nuevo Ingreso")
+        self.resizable(False, False)
         self.IncomeFrame=Frame(self,bg="Purple",width=450,height=450)
         self.IncomeFrame.pack() #fill="both",expand="True")
 

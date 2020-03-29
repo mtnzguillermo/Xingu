@@ -10,6 +10,7 @@ class ExpenseWindow(XinguWindow):
         self.root_window = root_window
         
         self.title("Nuevo Gasto")
+        self.resizable(False, False)
         self.ExpenseFrame=Frame(self,bg="Purple",width=450,height=450)
         self.ExpenseFrame.pack() #fill="both",expand="True")
 
