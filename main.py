@@ -1,4 +1,3 @@
-# Main script
 
 from GUI.StartWindow import StartWindow
 

@@ -21,8 +21,6 @@ class DataFrame(Frame):
         # Introduction of the frame in MainWindow
         self.place(x=0, y=root_window.OptFrame.winfo_height())
 
-        #root_window.OptFrame.Visualize()
-
         self.title = Label(self, text= "Mes y Año", fg="White", background="Purple", font=("Calibri", 16))
 
         self.headers = ["Fecha", "Campo", "Valor", "Concepto", "Total", "Indicador", "Ahorro"]
@@ -47,6 +45,9 @@ class DataFrame(Frame):
             self._tree.column(header, stretch=False, width=101)
         
         self._tree.bind("<Double-1>", self.DataDoubleClick)
+
+        # Default view: current month expenses
+        # root_window.OptFrame.VisualizeMonthMode(missing_args)
         
     def VisualizeMonthMode(self, year, month_string, month_integer):
 
