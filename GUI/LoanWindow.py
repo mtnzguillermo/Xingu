@@ -12,6 +12,7 @@ class LoanWindow(XinguWindow):
         self.root_window = root_window
         
         self.title("Nuevo Préstamo")
+        self.resizable(False, False)
         self.LoanFrame=Frame(self,bg="Purple",width=450,height=500)
         self.LoanFrame.pack() #fill="both",expand="True")
 
