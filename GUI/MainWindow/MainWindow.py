@@ -5,6 +5,7 @@ from GUI.IncomeWindow import IncomeWindow
 from GUI.LoanWindow import LoanWindow
 from DB.DataManagement import *
 from GUI.MainWindow.DataFrame import DataFrame
+from GUI.MainWindow.MonthPlotFrame import MonthPlotFrame
 
 #import tkinter.ttk as ttk
 
@@ -16,15 +17,22 @@ class MainWindow(XinguWindow):
 
         self.DB_Name = DB_Name
         
-        # Window configurationm
+        # Window configuration
         self.title("Xingú")
 
         # Setting fullscreen
         self.geometry("%dx%d+0+0" % (self.winfo_screenwidth(), self.winfo_screenheight()))
 
-        # Building frames
-        self.DatFrame = DataFrame(self)
+        # Building options frame
         self.OptFrame = OptionsFrame(self)
+
+        # Updating window, so all the elements have their actual size
+        # and PlotFrame and DataFrame can be con figured accordingly
+        self.update()
+
+        # Building window-size-demependent frames
+        self.DatFrame = DataFrame(self)
+        self.MonthPlFrame = MonthPlotFrame(self) # As a default, the plots for the current month are displayed
 
         # Menu
         self.editdb = Menu(self.menubar, tearoff=0)

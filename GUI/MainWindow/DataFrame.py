@@ -7,12 +7,19 @@ from GUI.ExpenseWindow import *
 class DataFrame(Frame):
 
     def __init__(self, root_window):
-        super().__init__(root_window, bg="Yellow", width=725, height=700)
+
+        # Saving root window as a class variable
+        self.root_window = root_window
+
+        # Setting frame dimensions
+        self.frame_width = root_window.OptFrame.winfo_width()
+        self.frame_height = root_window.winfo_height() - root_window.OptFrame.winfo_height()
+
+        # Calling parent constructor, with the corresponding dimensions
+        super().__init__(root_window, bg="Yellow", width=self.frame_width, height=self.frame_height)
 
         # Introduction of the frame in MainWindow
-        self.place(x=0, y=75)
-
-        self.root_window = root_window
+        self.place(x=0, y=root_window.OptFrame.winfo_height())
 
         #root_window.OptFrame.Visualize()
 
