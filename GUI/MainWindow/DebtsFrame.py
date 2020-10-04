@@ -39,6 +39,10 @@ class DebtsFrame(Frame):
         self._tree.configure(yscrollcommand=vsb.set)
         self._tree.pack(side="left")
 
+        self.UpdateTable()
+
+    def UpdateTable(self):
+
         for header in self.headers:
             self._tree.heading(header, text=header.title())
             self._tree.column(header, stretch=False, width=101)
@@ -47,14 +51,6 @@ class DebtsFrame(Frame):
 
         # Default view: current debts 
         # root_window.OptFrame.VisualizeMonthMode(missing_args)
-
-
-
-
-
-
-
-    #def VisualizeDebts(self, year, month_string, month_integer):
 
         for i in self._tree.get_children():
            self._tree.delete(i)

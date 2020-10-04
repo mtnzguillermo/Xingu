@@ -95,6 +95,7 @@ class LoanWindow(XinguWindow):
 
             DB.InsertLoan(self.root_window.DB_Name, self.datetime, self.person, self.value, self.concept, self.observations)
 
+            self.root_window.DebFrame.UpdateTable()
             #try: self.destroy()
             #except: pass
 
