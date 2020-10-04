@@ -78,6 +78,7 @@ class ExpenseWindow(XinguWindow):
         
         self.date = self.DateEntry.get()
         self.field = self.mode_field.get()
+        self.type = self.mode_type.get()
         self.value = self.ValueEntry.get()
         self.concept = self.ConceptEntry.get()
         self.observations = self.ObservationsText.get("1.0",'end-1c')
@@ -98,7 +99,7 @@ class ExpenseWindow(XinguWindow):
 
         from DB.DataManagement import InsertExpense
 
-        InsertExpense(self.root_window.DB_Name, self.datetime, self.field, self.value, self.concept, self.observations)
+        InsertExpense(self.root_window.DB_Name, self.datetime, self.field, self.type, self.value, self.concept, self.observations)
 
     def CheckParameters(self):      
         
@@ -107,6 +108,7 @@ class ExpenseWindow(XinguWindow):
             float(self.ValueEntry.get())
 
             if not self.field: raise Exception
+            if not self.type: raise Exception
             if not self.concept: raise Exception
 
             return(TRUE)
@@ -146,15 +148,16 @@ class EditExpenseWindow(ExpenseWindow):
 
         self.DateEntry.insert(0, day+"/"+month+"/"+year)
         self.mode_field.set(data[2])
-        self.ValueEntry.insert(0, -data[3])
-        self.ConceptEntry.insert(0, data[4])
-        self.ObservationsText.insert (1.0, data[5])
+        self.mode_type.set(data[3])
+        self.ValueEntry.insert(0, -data[4])
+        self.ConceptEntry.insert(0, data[5])
+        self.ObservationsText.insert (1.0, data[6])
 
     def DB_action(self):
 
         from DB.DataManagement import EditExpense
 
-        EditExpense(self.root_window.DB_Name, self.expense_code, self.datetime, self.field, self.value, self.concept, self.observations)
+        EditExpense(self.root_window.DB_Name, self.expense_code, self.datetime, self.field, self.type, self.value, self.concept, self.observations)
 
     # Action of  the Delete Button
     def AskForConfirmation(self, event):

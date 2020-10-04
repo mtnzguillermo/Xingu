@@ -1,18 +1,18 @@
 import sqlite3
 from datetime import datetime
 
-def InsertExpense(DB_Name, date, field, value, concept, observations):
+def InsertExpense(DB_Name, date, field, entry_type, value, concept, observations):
 
     # Opening connection and creating the cursor
     connection = sqlite3.connect(DB_Name)
     cursor = connection.cursor()
 
     # Generation of the new code for the expense
-    code = GenerateNewCode(cursor, date, field)
+    code = GenerateNewCode(cursor, date, entry_type)
 
     # Updating EXPENSES table in DB
-    expense_values = (code, date, field, value, concept, observations)
-    cursor.execute("INSERT INTO EXPENSES VALUES(?, ?, ?, ?, ?, ?)", expense_values)
+    expense_values = (code, date, field, entry_type, value, concept, observations)
+    cursor.execute("INSERT INTO EXPENSES VALUES(?, ?, ?, ?, ?, ?, ?)", expense_values)
     
     # Updating MONEY table in DB
     InsertMoneyEntry(cursor, code, value)
@@ -39,18 +39,18 @@ def InsertLoan(DB_Name, date, person, value, concept, observations):
     connection.commit()
     connection.close()
 
-def EditExpense(DB_Name, old_code, date, field, value, concept, observations):
+def EditExpense(DB_Name, old_code, date, field, entry_type, value, concept, observations):
 
     # Opening connection and creating the cursor
     connection = sqlite3.connect(DB_Name)
     cursor = connection.cursor()
 
     # Generation of the new code for the expense
-    new_code = GenerateNewCode(cursor, date, field)
+    new_code = GenerateNewCode(cursor, date, entry_type)
 
     # Updating EXPENSES table in DB
-    expense_values = (new_code, date, field, value, concept, observations, old_code)
-    cursor.execute("UPDATE EXPENSES SET CODE = ?, DATE = ?, FIELD = ?, VALUE = ?, CONCEPT = ?, OBSERVATIONS = ? WHERE CODE = ?", expense_values)
+    expense_values = (new_code, date, field, entry_type, value, concept, observations, old_code)
+    cursor.execute("UPDATE EXPENSES SET CODE = ?, DATE = ?, FIELD = ?, TYPE = ?, VALUE = ?, CONCEPT = ?, OBSERVATIONS = ? WHERE CODE = ?", expense_values)
     
     # Updating MONEY table in DB
     EditMoneyEntry(cursor, old_code, new_code, value)
@@ -90,10 +90,10 @@ def GetSingleExpense(DB_Name, code):
 
     return(list(expense))
 
-def GenerateNewCode(cursor, date, field):
+def GenerateNewCode(cursor, date, entry_type):
 
     # Turning the date into a entry code
-    if field == "Mensual":
+    if entry_type == "Mensual":
         day_code = int(date.strftime("%Y%m")+"00000")
     else:
         day_code = int(date.strftime("%Y%m%d")+"000")
@@ -164,7 +164,7 @@ def UpdateLaterMoneyEntries(cursor, code):
         corresponding_expense = cursor.fetchone()
 
         # Calculating new parameters
-        total_money = round(total_money + corresponding_expense[3], 2)
+        total_money = round(total_money + corresponding_expense[4], 2)
         [month_indicator, month_savings] = CalculateMoneyParameters(cursor, entry[0])
         money_values = [total_money, month_indicator, month_savings, entry[0]]
 
@@ -213,7 +213,7 @@ def CalculateMoneyParameters(cursor, code):
     # Calculating total monthly income
     monthly_income = 0
     for data in monthly_data:
-        monthly_income += data[3]
+        monthly_income += data[4]
 
     # Extracting all expenses/incomes during the month until the given day
     limits = [year+month+"01000", str(code)]
@@ -223,7 +223,7 @@ def CalculateMoneyParameters(cursor, code):
     # Calculating total month expense at the given day
     month_expense = 0
     for data in month_data:
-        month_expense -= data[3]
+        month_expense -= data[4]
     
     # Calculating days in the given month
     from calendar import monthrange
@@ -251,7 +251,7 @@ def GetMonthExpenses(DB_Name, year, month):
     for code in month_codes:
         expense_data = GetExpenseEntry(cursor, code)
         money_data = GetMoneyEntry(cursor, code)
-        entry_data = expense_data[0:5] + money_data[1:]
+        entry_data = expense_data[0:6] + money_data[1:]
         print(entry_data)
         month_expenses.append(entry_data)
 

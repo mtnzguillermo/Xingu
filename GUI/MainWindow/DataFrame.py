@@ -23,7 +23,7 @@ class DataFrame(Frame):
 
         self.title = Label(self, text= "Mes y Año", fg="White", background="Purple", font=("Calibri", 16))
 
-        self.headers = ["Fecha", "Campo", "Valor", "Concepto", "Total", "Indicador", "Ahorro"]
+        self.headers = ["Fecha", "Campo", "Tipo", "Valor", "Concepto", "Total", "Indicador", "Ahorro"]
 
         self._tree = ttk.Treeview(self, height=25, columns=self.headers, show="headings")
 
