@@ -297,8 +297,26 @@ def GetMoneyEntry(cursor, code):
 
     return(money_entry)
 
-def GetLoanEntry(code):
-    pass
+def GetAllDebts(DB_Name):
+    
+    # Opening connection and creating the cursor
+    connection = sqlite3.connect(DB_Name)
+    cursor = connection.cursor()
+
+    # Extracting data from DEBTS table
+    cursor.execute("SELECT * FROM DEBTS")
+    db_output = cursor.fetchall()
+
+    # Organising data
+    all_debts = []
+    for line in db_output:
+        all_debts.append(list(line))
+
+    # Final actions and closing connection
+    connection.commit()
+    connection.close()
+
+    return(all_debts)
 
 def GetDebtPeople(DB_Name):
 
