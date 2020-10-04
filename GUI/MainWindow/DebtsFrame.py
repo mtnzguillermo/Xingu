@@ -47,3 +47,32 @@ class DebtsFrame(Frame):
 
         # Default view: current debts 
         # root_window.OptFrame.VisualizeMonthMode(missing_args)
+
+
+
+
+
+
+
+    #def VisualizeDebts(self, year, month_string, month_integer):
+
+        for i in self._tree.get_children():
+           self._tree.delete(i)
+
+        #Get parameters from DB
+        self.visualization_data = GetAllDebts(self.root_window.DB_Name)
+        #self.visualization_data = GetMonthExpenses(self.root_window.DB_Name, year, month_integer)
+        
+        self.index_tree = -1
+        for row in self.visualization_data:
+            self.index_tree  = self.index_tree + 1
+            self.add_row(row[0:], self.index_tree)
+    
+    def add_row(self, row, index_tree):
+
+        self.item = 4
+        self._tree.insert('', 'end', id=index_tree, values=row)
+        for i, self.item in enumerate(row):
+            col_width = 101
+            if self._tree.column(self.headers[i], width=None) < col_width:
+                    self._tree.column(self.headers[i], width=col_width)
